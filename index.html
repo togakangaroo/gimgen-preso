@@ -1,0 +1,54 @@
+<head></head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/theme/white.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css"/>
+<style>
+ code {
+		 tab-size: .5em;
+	}
+</style>
+<div class="reveal">
+		<div class="slides">
+
+				<section data-markdown>
+						<script type="text/template">
+								# Outline
+
+								* Standalone CSS techniques
+								* `:target`
+								* `next selector`
+								* `following sibling selector`
+								* flexbox `order` property
+								* `last-of-type` selection
+								* `label` and radio inputs
+						</script>
+				</section>
+				<section>
+						Slide 1
+						<pre><code class="js" data-trim >
+								function foo * ()	 {
+										const bar = 123
+										baz(bar)
+								}
+						</code> </pre>
+				</section>
+				<section>Slide 2</section>
+		</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/head.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/js/reveal.min.js"></script>
+<script>
+Reveal.initialize({
+		history: true,
+		dependencies: [
+		{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.min.js', async: true, callback:() => hljs.initHighlightingOnLoad() },
+		{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/marked.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
+		{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/markdown.min.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
+		{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/zoom-js/zoom.min.js', async: true },
+		{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/notes/notes.min.js', async: true },
+		]
+});
+</script>
+<script id="__bs_script__">//<![CDATA[
+document.write("<script async src='http://localhost:3000/browser-sync/browser-sync-client.js?v=2.18.8'><\/script>".replace("HOST", location.hostname));
+//]]></script>
