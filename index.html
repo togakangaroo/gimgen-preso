@@ -3,9 +3,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/theme/white.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css"/>
 <style>
- code {
-		 tab-size: .5em;
-	}
+		code {
+				tab-size: .5em;
+		}
+		.sample-page-url {
+		}
+		iframe.sample-page {
+				border: 1px solid black;
+		}
 </style>
 <div class="reveal">
 		<div class="slides">
@@ -22,6 +27,28 @@
 								* `last-of-type` selection
 								* `label` and radio inputs
 						</script>
+				</section>
+				<section id="target-slide">
+						<h1><code>:target</code></h1>
+						<pre><code class="html"></code></pre>
+						<p class="sample-page-url"></p>
+						<iframe src="target-example.html" class="sample-page"></iframe>
+						<script>
+						{
+								const ctx = document.querySelector('#target-slide')
+								const urlView = ctx.querySelector('.sample-page-url')
+								const doc = ctx.querySelector('.sample-page').contentWindow
+								doc.addEventListener('hashchange', () =>
+										urlView.textContent = doc.location.href
+								)
+								doc.addEventListener('load', () =>
+										ctx.querySelector('pre>code').textContent = doc.document.body.innerHTML
+								)
+						}
+						</script>
+				</section>
+				<section>
+						
 				</section>
 				<section>
 						Slide 1
