@@ -11,6 +11,12 @@
 		iframe.sample-page {
 				border: 1px solid black;
 		}
+		h1 code {
+				outline: 1px dotted;
+		}
+		.smaller {
+				font-size: 50% !important;
+		}
 </style>
 <div class="reveal">
 		<div class="slides">
@@ -23,16 +29,15 @@
 								* `:target`
 								* `next selector`
 								* `following sibling selector`
-								* flexbox `order` property
 								* `last-of-type` selection
-								* `label` and radio inputs
+								* flexbox `order` property
 						</script>
 				</section>
 				<section id="target-example-slide">
-						<h1><code>:target</code></h1>
+						<h1><code>:target</code> url match selector</h1>
 						<p class="sample-page-url"></p>
 						<iframe src="target-example.html" class="sample-page"></iframe>
-						<pre><code class="html"></code></pre>
+						<pre><code class="html" data-trim></code></pre>
 						<script>
 						{
 								const ctx = document.querySelector('#target-example-slide')
@@ -63,7 +68,7 @@
 								<input name="next-selector-demo" type="radio" id="next-selector-demo-3">
 								<label for="next-selector-demo-3">Three</label>
 						</figure>
-						<pre><code class="html"></code></pre>
+						<pre><code class="html" data-trim></code></pre>
 				</section>
 				<section id="next-selector-slide-hidden">
 						<h1><code>+</code> next sibling selector</h1>
@@ -84,18 +89,46 @@
 								<input name="next-selector-demo-hidden" type="radio" id="next-selector-demo-hidden-3">
 								<label for="next-selector-demo-hidden-3">Three</label>
 						</figure>
-						<pre><code class="html"></code></pre>
+						<pre><code class="html" data-trim></code></pre>
 				</section>
-				<section>
-						Slide 1
-						<pre><code class="js" data-trim >
-								function foo * ()	 {
-										const bar = 123
-										baz(bar)
-								}
-						</code> </pre>
+				<section id="following-sibling-selector-slide">
+						<h1><code>~</code> following sibling selector</h1>
+						<figure class="sample-code">
+								<style>
+								 #following-sibling-selector-slide input:checked ~ label {
+										font-weight: bold;
+										background-color: #6287FE;
+									}
+								</style>
+								<input type="checkbox" id="following-sibling-selector-demo-1">
+								<label for="following-sibling-selector-demo-1">One</label>
+								<input type="checkbox" id="following-sibling-selector-demo-2">
+								<label for="following-sibling-selector-demo-2">Two</label>
+								<input type="checkbox" id="following-sibling-selector-demo-3">
+								<label for="following-sibling-selector-demo-3">Three</label>
+						</figure>
+						<pre><code class="html" data-trim></code></pre>
 				</section>
-				<section>Slide 2</section>
+				<section id="last-of-type-selector-slide">
+						<h1><code>:last-of-type</code></h1>
+						<figure class="sample-code smaller">
+								<style>
+								 #last-of-type-selector-slide figure article:last-of-type {
+										background-color: #6287FE;
+									}
+								 #last-of-type-selector-slide figure a:last-of-type {
+										background-color: #12A7FE;
+									}
+								</style>
+								<article>One Text Block</article>
+								<a>One Link</a>
+								<article>Two Text Block</article>
+								<a>Two Link</a>
+								<article>Three Text Block</article>
+								<a>Three Link</a>
+						</figure>
+						<pre><code class="html" data-trim></code></pre>
+				</section>
 		</div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/head.min.js"></script>
