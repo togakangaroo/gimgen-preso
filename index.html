@@ -28,14 +28,14 @@
 								* `label` and radio inputs
 						</script>
 				</section>
-				<section id="target-slide">
+				<section id="target-example-slide">
 						<h1><code>:target</code></h1>
-						<pre><code class="html"></code></pre>
 						<p class="sample-page-url"></p>
 						<iframe src="target-example.html" class="sample-page"></iframe>
+						<pre><code class="html"></code></pre>
 						<script>
 						{
-								const ctx = document.querySelector('#target-slide')
+								const ctx = document.querySelector('#target-example-slide')
 								const urlView = ctx.querySelector('.sample-page-url')
 								const doc = ctx.querySelector('.sample-page').contentWindow
 								doc.addEventListener('hashchange', () =>
@@ -47,8 +47,44 @@
 						}
 						</script>
 				</section>
-				<section>
-						
+				<section id="next-selector-slide">
+						<h1><code>+</code> next sibling selector</h1>
+						<figure class="sample-code">
+								<style>
+								 #next-selector-slide input:checked + label {
+										font-weight: bold;
+										background-color: #6287FE;
+									}
+								</style>
+								<input name="next-selector-demo" type="radio" id="next-selector-demo-1">
+								<label for="next-selector-demo-1">One</label>
+								<input name="next-selector-demo" type="radio" id="next-selector-demo-2">
+								<label for="next-selector-demo-2">Two</label>
+								<input name="next-selector-demo" type="radio" id="next-selector-demo-3">
+								<label for="next-selector-demo-3">Three</label>
+						</figure>
+						<pre><code class="html"></code></pre>
+				</section>
+				<section id="next-selector-slide-hidden">
+						<h1><code>+</code> next sibling selector</h1>
+						<figure class="sample-code">
+								<style>
+								 #next-selector-slide-hidden input:checked + label {
+										font-weight: bold;
+										background-color: #6287FE;
+									}
+								 #next-selector-slide-hidden input {
+										display: none;
+									}
+								</style>
+								<input name="next-selector-demo-hidden" type="radio" id="next-selector-demo-hidden-1">
+								<label for="next-selector-demo-hidden-1">One</label>
+								<input name="next-selector-demo-hidden" type="radio" id="next-selector-demo-hidden-2">
+								<label for="next-selector-demo-hidden-2">Two</label>
+								<input name="next-selector-demo-hidden" type="radio" id="next-selector-demo-hidden-3">
+								<label for="next-selector-demo-hidden-3">Three</label>
+						</figure>
+						<pre><code class="html"></code></pre>
 				</section>
 				<section>
 						Slide 1
@@ -64,6 +100,11 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/head.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/js/reveal.min.js"></script>
+<script>{
+const sampleCodes = document.querySelectorAll('.sample-code')
+for(let codeBlock of sampleCodes)
+		codeBlock.closest('section').querySelector('pre>code').textContent = codeBlock.innerHTML
+}</script>
 <script>
 Reveal.initialize({
 		history: true,
