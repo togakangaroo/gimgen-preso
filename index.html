@@ -17,6 +17,9 @@
 		.smaller {
 				font-size: 50% !important;
 		}
+		.smallest {
+				font-size: 35% !important;
+		}
 </style>
 <div class="reveal">
 		<div class="slides">
@@ -128,6 +131,57 @@
 								<a>Three Link</a>
 						</figure>
 						<pre><code class="html" data-trim></code></pre>
+				</section>
+				<section id="flex-order-slide">
+						<h1>flexbox <code>order</code></h1>
+						<figure class="sample-code smaller">
+								<style>
+								 #flex-order-slide figure {
+										display: flex;
+										flex-direction: column;
+									}
+								 #flex-order-slide figure article {
+										order: 2;
+									}
+								 #flex-order-slide figure a {
+										order: 1;
+									}
+								</style>
+								<article>One Text Block</article>
+								<a>One Link</a>
+								<article>Two Text Block</article>
+								<a>Two Link</a>
+								<article>Three Text Block</article>
+								<a>Three Link</a>
+						</figure>
+						<pre><code class="html" data-trim></code></pre>
+				</section>
+				<section id="flex-wrapping-order-slide">
+						<h1>flexbox <code>order</code> with wrapping</h1>
+						<figure class="sample-code smallest">
+								<style>
+								 #flex-wrapping-order-slide figure {
+										display: flex;
+										flex-wrap: wrap;
+									}
+								 #flex-wrapping-order-slide figure article {
+										order: 2;
+										width: 100%;
+										border: 1px solid black;
+									}
+								 #flex-wrapping-order-slide figure a {
+										order: 1;
+										margin-right: .5em;
+									}
+								</style>
+								<article>One Text Block</article>
+								<a>One Link</a>
+								<article>Two Text Block</article>
+								<a>Two Link</a>
+								<article>Three Text Block</article>
+								<a>Three Link</a>
+						</figure>
+						<pre class="smallest"><code class="html" data-trim></code></pre>
 				</section>
 		</div>
 </div>
