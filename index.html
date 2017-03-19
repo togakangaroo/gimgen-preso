@@ -67,9 +67,10 @@
 								doc.addEventListener('hashchange', () =>
 										urlView.textContent = doc.location.href
 								)
-								doc.addEventListener('load', () =>
+								const refreshCode = () =>
 										ctx.querySelector('pre>code').textContent = doc.document.body.innerHTML
-								)
+								refreshCode()
+								doc.addEventListener('load', refreshCode)
 						}
 						</script>
 				</section>
