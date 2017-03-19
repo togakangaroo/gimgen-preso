@@ -14,31 +14,49 @@
 		h1 code {
 				outline: 1px dotted;
 		}
+		.small {
+				font-size: 80% !important;
+		}
 		.smaller {
 				font-size: 50% !important;
 		}
 		.smallest {
 				font-size: 35% !important;
 		}
+		#tabbed-uis h1 {
+				font-size: 90%;
+		}
+		#javascript-headache img {
+		}
 </style>
 <div class="reveal">
 		<div class="slides">
 
-				<section data-markdown>
-						<script type="text/template">
-								# Outline
+				<section data-markdown id="main">
+						# CSS-Only Tabs
+						_(Are just plain cool, and you should use them)_
+						----
+						George Mauer
+						@togakangaroo - [http://georgemauer.net](http://georgemauer.net)
+				</section>
+				<section id="tabbed-uis" data-markdown>
+						# Tabbed UIs are *the* metaphor
+						![jQuery UI](/img/jquery-ui-tabs.png)
+						![Bootstrap](/img/bootstrap-tabs.png)
+						![Material Design](/img/material-design-tabs.png)
+				</section>
+				<section id="js-headache" class="small">
+						<h1>Javascript is a headache!</h1>
+						<img title="What a Headache" src="/img/what-a-headache.png" height="400">
+				</section>
+				<section id="load-up-inventory-slide" data-markdown>
+						![Game Inventory](/img/dc-hero-inventory.jpg)
 
-								* Standalone CSS techniques
-								* `:target`
-								* `next selector`
-								* `following sibling selector`
-								* `last-of-type` selection
-								* flexbox `order` property
-						</script>
+						## Lets take Inventory
 				</section>
 				<section id="target-example-slide">
-						<h1><code>:target</code> url match selector</h1>
-						<p class="sample-page-url"></p>
+						<h1 class="small"><code>:target</code> url match selector</h1>
+						<p class="sample-page-url smaller"></p>
 						<iframe src="target-example.html" class="sample-page"></iframe>
 						<pre><code class="html" data-trim></code></pre>
 						<script>
@@ -154,7 +172,7 @@
 								<article>Three Text Block</article>
 								<a>Three Link</a>
 						</figure>
-						<pre><code class="html" data-trim></code></pre>
+						<pre class="smallest"><code class="html" data-trim></code></pre>
 				</section>
 				<section id="flex-wrapping-order-slide">
 						<h1>flexbox <code>order</code> with wrapping</h1>
