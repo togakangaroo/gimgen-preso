@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/theme/white.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/addon/display/fullscreen.css"/>
 <style>
 		code, .CodeMirror {
 				tab-size: .5em;
@@ -39,7 +40,7 @@
 				</section>
 				<section id="js-editor">
 						<h1>An editor</h1>
-						<textarea class="code-editor" mode="javascript" runnable="true">// codemirror demo party!
+						<textarea class="code-editor" mode="javascript">
 var greeter = function(name) {
   return "Why hello there " + name;
 }
@@ -53,6 +54,7 @@ console.log(greeter("Joe"));
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/javascript/javascript.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/keymap/vim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/addon/display/fullscreen.min.js"></script>
 <script>{
 const sampleCodes = document.querySelectorAll('.sample-code')
 for(let codeBlock of sampleCodes)
@@ -74,6 +76,11 @@ setTimeout(() => {
 						CodeMirror.fromTextArea(el, {
 								lineNumbers: true,
 								keyMap: 'vim',
+								extraKeys: {
+								"F11": (cm) => {
+										cm.setOption("fullScreen", !cm.getOption("fullScreen"))
+								},
+								},
 						});
 		}, 500)
 }</script>
