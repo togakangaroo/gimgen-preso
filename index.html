@@ -10,7 +10,7 @@
 				tab-size: .5em;
 		}
 		.CodeMirror {
-				font-size: .5em !important;
+				font-size: .3em !important;
 		}
 
 		.CodeMirror pre {
@@ -38,13 +38,36 @@
 						George Mauer
 						@togakangaroo - [http://georgemauer.net](http://georgemauer.net)
 				</section>
-				<section id="js-editor">
-						<h1>An editor</h1>
+				<section id="manual-iterator-implementation">
+						<h1 class="smaller" >Iterators are Simple</h1>
+						<button class="run">Run</button>
 						<textarea class="code-editor" mode="javascript">
-var greeter = function(name) {
-  return "Why hello there " + name;
+window._manualFibbonacci = (...args) => {
+		let prev1 = 1, prev2 = 1, step = 0
+		return {
+				next: () => {
+						step += 1
+						if(step <2)
+								return {value: 1, done: false}
+						if(step > 100)
+								return {value: undefined, done: true}
+						const value = prev1 + prev2
+						prev1 = prev2
+						prev2 = value
+						return {value, done: false}
+				}
+		}
 }
-console.log(greeter("Joe"));
+						</textarea>
+				</section>
+				<section id="manual-iterator-usage">
+						<h1 class="small" >Iterators can be...well...iterated</h1>
+						<button class="run">Run</button>
+						<textarea class="code-editor" mode="javascript">
+const fibIterator = _manualFibbonacci()
+let x
+while((x = fibIterator.next(), !x.done))
+		console.log(x.value)
 						</textarea>
 				</section>
 		</div>
@@ -72,15 +95,19 @@ Reveal.initialize({
 		]
 });
 setTimeout(() => {
-				for(let el of document.querySelectorAll('textarea.code-editor'))
-						CodeMirror.fromTextArea(el, {
-								lineNumbers: true,
-								keyMap: 'vim',
-								extraKeys: {
-								"F11": (cm) => {
-										cm.setOption("fullScreen", !cm.getOption("fullScreen"))
-								},
-								},
-						});
-		}, 500)
+		for(let el of document.querySelectorAll('textarea.code-editor'))
+				CodeMirror.fromTextArea(el, {
+						lineNumbers: true,
+						keyMap: 'vim',
+						extraKeys: {
+						"F11": (cm) => {
+								cm.setOption("fullScreen", !cm.getOption("fullScreen"))
+						},
+						},
+				});
+}, 500)
+for(let run of document.querySelectorAll('.run'))
+		run.addEventListener('click', () =>{
+				eval(run.closest('section').querySelector('.code-editor').textContent)
+		})
 }</script>
