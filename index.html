@@ -63,12 +63,26 @@ const manualFibbonacci = (...args) => {
 				<section id="manual-iterator-usage">
 						<h1 class="small" >Iterators can be...well...iterated</h1>
 						<button class="run">Run</button>
-						<textarea class="code-editor" mode="javascript">
+						<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation .code-editor">
 const fibIterator = manualFibbonacci()
 let x
 while((x = fibIterator.next(), !x.done))
 		console.log(x.value)
 						</textarea>
+				</section>
+				<section id="for-iterator-usage">
+						<h1 class="small">Iterators can be used in loops</h1>
+						<button class="run">Run</button>
+						<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation .code-editor">
+const thingToIterate = {}
+thingToIterate[Symbol.iterator] = manualFibbonacci
+
+for(let val of thingToIterate)
+		console.log(val)
+						</textarea>
+						<p>
+								Yup, you can make anything iterable!
+						</p>
 				</section>
 		</div>
 </div>
@@ -106,16 +120,16 @@ setTimeout(() => {
 						},
 				});
 }, 500)
-Array.from(document.querySelectorAll('.run'))
-		.reduce((prevEditors, button) => {
-				const codeEditor = button.closest('section').querySelector('.code-editor')
-				const editorsToRun = [...prevEditors, codeEditor]
-				button.addEventListener('click', () =>{
-						const codeToRun = editorsToRun.map(ce => ce.textContent).join('\n;')
-						eval(`{
+for(let button of document.querySelectorAll('.run')) {
+		const codeEditor = button.closest('section').querySelector('.code-editor')
+		const dependsOnEditors = !codeEditor.dataset.depends ? [] : Array.from(document.querySelectorAll(codeEditor.dataset.depends))
+		const editorsToRun = [...dependsOnEditors, codeEditor]
+		button.addEventListener('click', () =>{
+				const codeToRun = editorsToRun.map(ce => ce.textContent).join('\n;')
+				console.clear()
+				eval(`{
 ${codeToRun}
 }`)
-				})
-				return editorsToRun
-		}, [])
+		})
+}
 }</script>
