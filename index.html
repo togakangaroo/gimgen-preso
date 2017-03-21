@@ -42,7 +42,7 @@
 						<h1 class="smaller" >Iterators are Simple</h1>
 						<button class="run">Run</button>
 						<textarea class="code-editor" mode="javascript">
-window._manualFibbonacci = (...args) => {
+const manualFibbonacci = (...args) => {
 		let prev1 = 1, prev2 = 1, step = 0
 		return {
 				next: () => {
@@ -64,7 +64,7 @@ window._manualFibbonacci = (...args) => {
 						<h1 class="small" >Iterators can be...well...iterated</h1>
 						<button class="run">Run</button>
 						<textarea class="code-editor" mode="javascript">
-const fibIterator = _manualFibbonacci()
+const fibIterator = manualFibbonacci()
 let x
 while((x = fibIterator.next(), !x.done))
 		console.log(x.value)
@@ -106,8 +106,16 @@ setTimeout(() => {
 						},
 				});
 }, 500)
-for(let run of document.querySelectorAll('.run'))
-		run.addEventListener('click', () =>{
-				eval(run.closest('section').querySelector('.code-editor').textContent)
-		})
+Array.from(document.querySelectorAll('.run'))
+		.reduce((prevEditors, button) => {
+				const codeEditor = button.closest('section').querySelector('.code-editor')
+				const editorsToRun = [...prevEditors, codeEditor]
+				button.addEventListener('click', () =>{
+						const codeToRun = editorsToRun.map(ce => ce.textContent).join('\n;')
+						eval(`{
+${codeToRun}
+}`)
+				})
+				return editorsToRun
+		}, [])
 }</script>
