@@ -3,17 +3,17 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/reveal.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/theme/white.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css"/>
 <style>
-		code {
+		code, .CodeMirror {
 				tab-size: .5em;
 		}
-		.sample-page-url {
+		.CodeMirror {
+				font-size: .5em !important;
 		}
-		iframe.sample-page {
-				border: 1px solid black;
-		}
-		h1 code {
-				outline: 1px dotted;
+
+		.CodeMirror pre {
+				box-shadow: none;
 		}
 		.small {
 				font-size: 80% !important;
@@ -27,203 +27,53 @@
 		#tabbed-uis h1 {
 				font-size: 90%;
 		}
-		#javascript-headache img {
-		}
 </style>
 <div class="reveal">
 		<div class="slides">
 
 				<section data-markdown id="main">
-						# CSS-Only Tabs
-						_(Are just plain cool, and you should use them)_
+						# gimgen
 						----
 						George Mauer
 						@togakangaroo - [http://georgemauer.net](http://georgemauer.net)
 				</section>
-				<section id="tabbed-uis" data-markdown>
-						# Tabbed UIs are *the* metaphor
-						![jQuery UI](img/jquery-ui-tabs.png)
-						![Bootstrap](img/bootstrap-tabs.png)
-						![Material Design](img/material-design-tabs.png)
-				</section>
-				<section id="js-headache" class="small">
-						<h1>Javascript is a headache!</h1>
-						<img title="What a Headache" src="img/what-a-headache.png" height="400">
-				</section>
-				<section id="load-up-inventory-slide" data-markdown>
-						![Game Inventory](img/dc-hero-inventory.jpg)
-
-						## Lets take Inventory
-				</section>
-				<section id="target-example-slide">
-						<h1 class="small"><code>:target</code> url match selector</h1>
-						<p class="sample-page-url smaller"></p>
-						<iframe src="target-example.html" class="sample-page"></iframe>
-						<pre><code class="html" data-trim></code></pre>
-						<script>
-						{
-								const ctx = document.querySelector('#target-example-slide')
-								const urlView = ctx.querySelector('.sample-page-url')
-								const doc = ctx.querySelector('.sample-page').contentWindow
-								doc.addEventListener('hashchange', () =>
-										urlView.textContent = doc.location.href
-								)
-								const refreshCode = () =>
-										ctx.querySelector('pre>code').textContent = doc.document.body.innerHTML
-								refreshCode()
-								doc.addEventListener('load', refreshCode)
-						}
-						</script>
-				</section>
-				<section id="next-selector-slide">
-						<h1><code>+</code> next sibling selector</h1>
-						<figure class="sample-code">
-								<style>
-								 #next-selector-slide input:checked + label {
-										font-weight: bold;
-										background-color: #6287FE;
-									}
-								</style>
-								<input name="next-selector-demo" type="radio" id="next-selector-demo-1">
-								<label for="next-selector-demo-1">One</label>
-								<input name="next-selector-demo" type="radio" id="next-selector-demo-2">
-								<label for="next-selector-demo-2">Two</label>
-								<input name="next-selector-demo" type="radio" id="next-selector-demo-3">
-								<label for="next-selector-demo-3">Three</label>
-						</figure>
-						<pre><code class="html" data-trim></code></pre>
-				</section>
-				<section id="next-selector-slide-hidden">
-						<h1><code>+</code> next sibling selector</h1>
-						<figure class="sample-code">
-								<style>
-								 #next-selector-slide-hidden input:checked + label {
-										font-weight: bold;
-										background-color: #6287FE;
-									}
-								 #next-selector-slide-hidden input {
-										display: none;
-									}
-								</style>
-								<input name="next-selector-demo-hidden" type="radio" id="next-selector-demo-hidden-1">
-								<label for="next-selector-demo-hidden-1">One</label>
-								<input name="next-selector-demo-hidden" type="radio" id="next-selector-demo-hidden-2">
-								<label for="next-selector-demo-hidden-2">Two</label>
-								<input name="next-selector-demo-hidden" type="radio" id="next-selector-demo-hidden-3">
-								<label for="next-selector-demo-hidden-3">Three</label>
-						</figure>
-						<pre><code class="html" data-trim></code></pre>
-				</section>
-				<section id="following-sibling-selector-slide">
-						<h1><code>~</code> following sibling selector</h1>
-						<figure class="sample-code">
-								<style>
-								 #following-sibling-selector-slide input:checked ~ label {
-										font-weight: bold;
-										background-color: #6287FE;
-									}
-								</style>
-								<input type="checkbox" id="following-sibling-selector-demo-1">
-								<label for="following-sibling-selector-demo-1">One</label>
-								<input type="checkbox" id="following-sibling-selector-demo-2">
-								<label for="following-sibling-selector-demo-2">Two</label>
-								<input type="checkbox" id="following-sibling-selector-demo-3">
-								<label for="following-sibling-selector-demo-3">Three</label>
-						</figure>
-						<pre><code class="html" data-trim></code></pre>
-				</section>
-				<section id="last-of-type-selector-slide">
-						<h1><code>:last-of-type</code></h1>
-						<figure class="sample-code smaller">
-								<style>
-								 #last-of-type-selector-slide figure article:last-of-type {
-										background-color: #6287FE;
-									}
-								 #last-of-type-selector-slide figure a:last-of-type {
-										background-color: #12A7FE;
-									}
-								</style>
-								<article>One Text Block</article>
-								<a>One Link</a>
-								<article>Two Text Block</article>
-								<a>Two Link</a>
-								<article>Three Text Block</article>
-								<a>Three Link</a>
-						</figure>
-						<pre><code class="html" data-trim></code></pre>
-				</section>
-				<section id="flex-order-slide">
-						<h1>flexbox <code>order</code></h1>
-						<figure class="sample-code smaller">
-								<style>
-								 #flex-order-slide figure {
-										display: flex;
-										flex-direction: column;
-									}
-								 #flex-order-slide figure article {
-										order: 2;
-									}
-								 #flex-order-slide figure a {
-										order: 1;
-									}
-								</style>
-								<article>One Text Block</article>
-								<a>One Link</a>
-								<article>Two Text Block</article>
-								<a>Two Link</a>
-								<article>Three Text Block</article>
-								<a>Three Link</a>
-						</figure>
-						<pre class="smallest"><code class="html" data-trim></code></pre>
-				</section>
-				<section id="flex-wrapping-order-slide">
-						<h1>flexbox <code>order</code> with wrapping</h1>
-						<figure class="sample-code smallest">
-								<style>
-								 #flex-wrapping-order-slide figure {
-										display: flex;
-										flex-wrap: wrap;
-									}
-								 #flex-wrapping-order-slide figure article {
-										order: 2;
-										width: 100%;
-										border: 1px solid black;
-									}
-								 #flex-wrapping-order-slide figure a {
-										order: 1;
-										margin-right: .5em;
-									}
-								</style>
-								<article>One Text Block</article>
-								<a>One Link</a>
-								<article>Two Text Block</article>
-								<a>Two Link</a>
-								<article>Three Text Block</article>
-								<a>Three Link</a>
-						</figure>
-						<pre class="smallest"><code class="html" data-trim></code></pre>
+				<section id="js-editor">
+						<h1>An editor</h1>
+						<textarea class="code-editor" mode="javascript" runnable="true">// codemirror demo party!
+var greeter = function(name) {
+  return "Why hello there " + name;
+}
+console.log(greeter("Joe"));
+						</textarea>
 				</section>
 		</div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/head.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/js/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/keymap/vim.min.js"></script>
 <script>{
 const sampleCodes = document.querySelectorAll('.sample-code')
 for(let codeBlock of sampleCodes)
 		codeBlock.closest('section').querySelector('pre>code').textContent = codeBlock.innerHTML
 }</script>
-<script>
+<script>{
 Reveal.initialize({
 		history: true,
 		dependencies: [
-		{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.min.js', async: true, callback:() => hljs.initHighlightingOnLoad() },
-		{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/marked.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
-		{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/markdown.min.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
-		{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/zoom-js/zoom.min.js', async: true },
-		{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/notes/notes.min.js', async: true },
+				{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.min.js', async: true, callback:() => hljs.initHighlightingOnLoad() },
+				{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/marked.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
+				{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/markdown.min.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
+				{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/zoom-js/zoom.min.js', async: true },
+				{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/notes/notes.min.js', async: true },
 		]
 });
-</script>
-<script id="__bs_script__">//<![CDATA[
-document.write("<script async src='http://localhost:3000/browser-sync/browser-sync-client.js?v=2.18.8'><\/script>".replace("HOST", location.hostname));
-//]]></script>
+setTimeout(() => {
+				for(let el of document.querySelectorAll('textarea.code-editor'))
+						CodeMirror.fromTextArea(el, {
+								lineNumbers: true,
+								keyMap: 'vim',
+						});
+		}, 500)
+}</script>
