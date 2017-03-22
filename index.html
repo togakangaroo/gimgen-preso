@@ -70,15 +70,14 @@ const manualFibbonacci = () => {
 }
 										</textarea>
 										<figure>
-										<button class="run">Run</button>
-										<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
+												<button class="run">Run</button>
+												<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
 const fib = manualFibbonacci()
 console.log(fib.next())
 console.log(fib.next())
 console.log(fib.next())
 console.log(fib.next())
-										</textarea>
-												
+												</textarea>
 										</figure>
 								</div>
 						</section>
@@ -157,14 +156,34 @@ for(let {name} of fergus)
 		console.log(name)
 								</textarea>
 						</section>
-						
 				</section>
 
 				<section id="generator-fibonacci">
-						<h1 class="small" >Generators are a simpler iterator syntax</h1>
+						<h1 class="small" >generators are a simpler iterator syntax</h1>
 						<div class="row">
 								<figure>
-										<button class="run">Run</button>
+										<textarea class="code-editor" mode="javascript">
+const manualfibbonacci = () => {
+		let prev1 = 1, prev2 = 1, step = 0
+		return {
+				next: () => {
+						if(step > 100)
+								return {value: undefined, done: true};
+						step += 1
+						if(step <= 2)
+								return {value: 1, done: false};
+						[prev1, prev2] = [prev2, prev1 + prev2]
+						return {value: prev2, done: false};
+				}
+		}
+}
+										</textarea>
+								</figure>
+								<p>
+										==
+								</p>
+								<figure>
+										<button class="run">run</button>
 										<textarea class="code-editor" mode="javascript">
 const fibonacci = function * () {
 		let prev1 = 1, prev2 = 1
@@ -180,29 +199,61 @@ for(let v of fibonacci())
 		console.log(v)
 										</textarea>
 								</figure>
+						</div>
+				</section>
+
+				<section id="generator-fibonacci-infinite">
+						<h1 class="small">Oh yeah, iterators can be infinite!</h1>
+						<div class="row">
+								<figure>
+										<button class="run">run</button>
+										<textarea class="code-editor" mode="javascript">
+const manualFibbonacci = () => {
+		let prev1 = 1, prev2 = 1, step = 0
+		return {
+				next: () => {
+						step += 1
+						if(step <= 2)
+								return {value: 1, done: false};
+						[prev1, prev2] = [prev2, prev1 + prev2]
+						return {value: prev2, done: false};
+				}
+		}
+}
+
+const it = manualFibbonacci()
+for(let i = 0; i < 100; i+=1)
+		it.next()
+console.log(it.next())
+										</textarea>
+								</figure>
 								<p>
 										==
 								</p>
 								<figure>
+										<button class="run">run</button>
 										<textarea class="code-editor" mode="javascript">
-		const manualFibbonacci = () => {
-				let prev1 = 1, prev2 = 1, step = 0
-				return {
-						next: () => {
-								if(step > 100)
-										return {value: undefined, done: true};
-								step += 1
-								if(step <= 2)
-										return {value: 1, done: false};
-								[prev1, prev2] = [prev2, prev1 + prev2]
-								return {value: prev2, done: false};
-						}
-				}
+const fibbonacci = function * () {
+		let prev1 = 1, prev2 = 1
+		yield prev1
+		yield prev2
+		while(true) {
+				[prev1, prev2] = [prev2, prev1 + prev2]
+				yield prev2
 		}
+}
+
+const it = fibbonacci()
+for(let i = 0; i < 100; i+=1)
+		it.next()
+console.log(it.next())
 										</textarea>
 								</figure>
 						</div>
 				</section>
+
+
+				<section>
 
 				<section id="generator-duck-iteration">
 						<h1 class="small" >Flattening with generators</h1>
@@ -220,6 +271,7 @@ for(let {name} of getAll(fergus))
 
 		</div>
 </div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/head.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/js/reveal.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
