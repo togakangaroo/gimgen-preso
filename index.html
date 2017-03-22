@@ -202,12 +202,13 @@ for(let v of fibonacci())
 						</div>
 				</section>
 
-				<section id="generator-fibonacci-infinite">
-						<h1 class="small">Oh yeah, iterators can be infinite!</h1>
-						<div class="row">
-								<figure>
-										<button class="run">run</button>
-										<textarea class="code-editor" mode="javascript">
+				<section>
+						<section id="generator-fibbonacci-infinite">
+								<h1 class="small">Oh yeah, iterators can be infinite!</h1>
+								<div class="row">
+										<figure>
+												<button class="run">run</button>
+												<textarea class="code-editor" mode="javascript">
 const manualFibbonacci = () => {
 		let prev1 = 1, prev2 = 1, step = 0
 		return {
@@ -225,14 +226,14 @@ const it = manualFibbonacci()
 for(let i = 0; i < 100; i+=1)
 		it.next()
 console.log(it.next())
-										</textarea>
-								</figure>
-								<p>
-										==
-								</p>
-								<figure>
-										<button class="run">run</button>
-										<textarea class="code-editor" mode="javascript">
+												</textarea>
+										</figure>
+										<p>
+												==
+										</p>
+										<figure>
+												<button class="run">run</button>
+												<textarea class="code-editor" mode="javascript">
 const fibbonacci = function * () {
 		let prev1 = 1, prev2 = 1
 		yield prev1
@@ -247,13 +248,31 @@ const it = fibbonacci()
 for(let i = 0; i < 100; i+=1)
 		it.next()
 console.log(it.next())
-										</textarea>
-								</figure>
-						</div>
+												</textarea>
+										</figure>
+								</div>
+						</section>
+
+						<section id="incrementing-random-number-generator">
+								<h1 class="small">Infinite generators are streams</h1>
+								<button class="run">run</button>
+								<textarea class="code-editor" mode="javascript">
+const incrementingRandoms = function * () {
+		const rand = (max, min=0) => Math.floor(Math.random() * (max - min)) + min
+		let prev = 0
+		while(true) {
+				prev = rand(prev+1000, prev+1)
+				yield prev
+		}
+}
+
+const it = incrementingRandoms()
+for(let i = 0; i < 10; i+=1)
+		console.log(it.next().value)
+								</textarea>
+						</section>
 				</section>
 
-
-				<section>
 
 				<section id="generator-duck-iteration">
 						<h1 class="small" >Flattening with generators</h1>
