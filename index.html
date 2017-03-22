@@ -38,6 +38,7 @@
 						George Mauer
 						@togakangaroo - [http://georgemauer.net](http://georgemauer.net)
 				</section>
+
 				<section id="manual-iterator-implementation">
 						<h1 class="smaller" >Iterators are Simple</h1>
 						<button class="run">Run</button>
@@ -60,6 +61,7 @@ const manualFibbonacci = (...args) => {
 }
 						</textarea>
 				</section>
+
 				<section id="manual-iterator-usage">
 						<h1 class="small" >Iterators can be...well...iterated</h1>
 						<button class="run">Run</button>
@@ -70,6 +72,7 @@ while((x = fibIterator.next(), !x.done))
 		console.log(x.value)
 						</textarea>
 				</section>
+
 				<section id="for-iterator-usage">
 						<h1 class="small">Iterators can be used in loops</h1>
 						<button class="run">Run</button>
@@ -84,6 +87,66 @@ for(let val of thingToIterate)
 								Yup, you can make anything iterable!
 						</p>
 				</section>
+
+				<section id="duck-tree-slide">
+						<h1 class="small">Lets talk about ducks</h1>
+						<img src="img/duck-family-tree.jpg" height="600">
+						<script type="js-later/text" id="duck-tree">
+								const duck = (name, children=[]) => ({name, children})
+								const fergus =
+								duck("Fergus", [
+										duck("Matilda"),
+										duck("Scrooge"),
+										duck("Hortense", [
+										duck("Donald"),
+										duck("Della", [
+												duck("Huey"),
+												duck("Dewey"),
+												duck("Louie"),
+										])
+										]),
+								])
+						</script>
+				</section>
+
+				<section id="manual-duck-iteration">
+						<h1 class="small" >Iterators can flatten</h1>
+						<button class="run">Run</button>
+						<textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
+const getAllManual = (root) => {
+		const stack = [root]
+		return {
+				next: () => {
+						if(!stack.length)
+								return {value: undefined, done: true}
+					  const value = stack.pop()
+						for(let c of value.children)
+							stack.push(c)
+						return {value, done: false}
+
+				}
+		}
+}
+fergus[Symbol.iterator] = () => getAllManual(fergus)
+for(let {name} of fergus)
+	console.log(name)
+						</textarea>
+				</section>
+
+				<section id="generator-duck-iteration">
+						<h1 class="small" >Flattening with generators</h1>
+						<button class="run">Run</button>
+						<textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
+const getAll = function * (root) {
+		yield root
+		for(let c of root.children)
+				yield * getAll(c)
+}
+for(let {name} of getAll(fergus))
+	console.log(name)
+						</textarea>
+				</section>
+
 		</div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/head.min.js"></script>
