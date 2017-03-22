@@ -196,6 +196,12 @@ Reveal.initialize({
 				{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/notes/notes.min.js', async: true },
 		]
 });
+const codeMirrors = new Map()
+Reveal.addEventListener( 'slidechanged', ({currentSlide}) => {
+		for(let el of currentSlide.querySelectorAll('.code-editor'))
+				codeMirrors.get(el) && codeMirrors.get(el).refresh()
+} );
+
 setTimeout(() => {
 		for(let el of document.querySelectorAll('textarea.code-editor')) {
 				const ed = CodeMirror.fromTextArea(el, {
@@ -208,6 +214,7 @@ setTimeout(() => {
 						},
 				});
 				ed.on('change', () => ed.save());
+				codeMirrors.set(el, ed)
 		}
 }, 500)
 for(let button of document.querySelectorAll('.run')) {
