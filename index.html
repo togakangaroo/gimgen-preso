@@ -253,10 +253,23 @@ console.log(it.next())
 								</div>
 						</section>
 
-						<section id="incrementing-random-number-generator">
+						<section id="generator-duck-iteration">
+								<h1 class="small" >Flattening ducks with generators</h1>
+								<button class="run">Run</button>
+								<textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
+const getAll = function * (root) {
+		yield root
+		for(let c of root.children)
+				yield * getAll(c)
+}
+for(let {name} of getAll(fergus))
+	console.log(name)
+								</textarea>
+						</section>
+
+						<section id="incrementing-random-number-generator-slide">
 								<h1 class="small">Infinite generators are streams</h1>
-								<button class="run">run</button>
-								<textarea class="code-editor" mode="javascript">
+								<textarea class="code-editor" mode="javascript" id="incrementing-random-number-generator">
 const incrementingRandoms = function * () {
 		const rand = (max, min=0) => Math.floor(Math.random() * (max - min)) + min
 		let prev = 0
@@ -265,28 +278,68 @@ const incrementingRandoms = function * () {
 				yield prev
 		}
 }
+								</textarea>
 
+								<figure>
+										<button class="run">run</button>
+										<textarea class="code-editor" mode="javascript" data-depends="#incrementing-random-number-generator">
 const it = incrementingRandoms()
 for(let i = 0; i < 10; i+=1)
 		console.log(it.next().value)
+										</textarea>
+								</figure>
+						</section>
+				</section>
+
+				<section>
+						<section id="you-choose-how-it-runs">
+								<h1 class="small">You choose how to enumerate iterators</h1>
+								<button class="run">run</button>
+								<textarea class="code-editor" mode="javascript" data-depends="#incrementing-random-number-generator">
+const logAndTakeEveryMs = (ms, createIterator) => {
+		const it = createIterator()
+		const logAndGetNext = ({done, value}) => {
+				if(done) return;
+				console.log(value)
+				setTimeout( () => logAndGetNext(it.next()) , ms)
+		}
+		logAndGetNext(it.next())
+}
+
+logAndTakeEveryMs(500, incrementingRandoms)
+								</textarea>
+						</section>
+
+						<section id="count-with-promises">
+								<h1 class="small">Now with...promises!</h1>
+								<button class="run">run</button>
+								<textarea class="code-editor" mode="javascript">
+const delayedIncrementingRandoms = function * () {
+		const rand = (max, min=0) => Math.floor(Math.random() * (max - min)) + min
+		let val = 0
+		while(true) {
+				val = rand(val+1000, val+1)
+				console.log("Currently", val)
+				yield new Promise(resolve =>
+						setTimeout(() => resolve(val), 300)
+				)
+		}
+}
+
+const runYieldedPromises = (createIterator) => {
+		const it = createIterator()
+		const runNext = ({done, value: promise}) => {
+				if(done) return;
+				promise.then(() => runNext(it.next()))
+		}
+		runNext(it.next())
+}
+
+runYieldedPromises(delayedIncrementingRandoms)
 								</textarea>
 						</section>
 				</section>
 
-
-				<section id="generator-duck-iteration">
-						<h1 class="small" >Flattening with generators</h1>
-						<button class="run">Run</button>
-						<textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
-const getAll = function * (root) {
-		yield root
-		for(let c of root.children)
-				yield * getAll(c)
-}
-for(let {name} of getAll(fergus))
-	console.log(name)
-						</textarea>
-				</section>
 
 		</div>
 </div>
@@ -300,52 +353,52 @@ for(let {name} of getAll(fergus))
 <script>{
 const sampleCodes = document.querySelectorAll('.sample-code')
 for(let codeBlock of sampleCodes)
-		codeBlock.closest('section').querySelector('pre>code').textContent = codeBlock.innerHTML
-}</script>
-<script>{
-Reveal.initialize({
-		history: true,
-		dependencies: [
-				{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.min.js', async: true, callback:() => hljs.initHighlightingOnLoad() },
-				{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/marked.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
-				{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/markdown.min.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
-				{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/zoom-js/zoom.min.js', async: true },
-				{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/notes/notes.min.js', async: true },
-		]
-});
-const codeMirrors = new Map()
-Reveal.addEventListener( 'slidechanged', ({currentSlide}) => {
-		for(let el of currentSlide.querySelectorAll('.code-editor'))
-				codeMirrors.get(el) && codeMirrors.get(el).refresh()
-} );
+				codeBlock.closest('section').querySelector('pre>code').textContent = codeBlock.innerHTML
+		}</script>
+		<script>{
+		Reveal.initialize({
+				history: true,
+				dependencies: [
+						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.min.js', async: true, callback:() => hljs.initHighlightingOnLoad() },
+						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/marked.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
+						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/markdown.min.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
+						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/zoom-js/zoom.min.js', async: true },
+						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/notes/notes.min.js', async: true },
+				]
+		});
+		const codeMirrors = new Map()
+		Reveal.addEventListener( 'slidechanged', ({currentSlide}) => {
+				for(let el of currentSlide.querySelectorAll('.code-editor'))
+						codeMirrors.get(el) && codeMirrors.get(el).refresh()
+		} );
 
-setTimeout(() => {
-		for(let el of document.querySelectorAll('.code-editor')) {
-				const ed = CodeMirror.fromTextArea(el, {
-						lineNumbers: true,
-						keyMap: 'vim',
-						extraKeys: {
-								"F11": (cm) => {
-										cm.setOption("fullScreen", !cm.getOption("fullScreen"))
+		setTimeout(() => {
+				for(let el of document.querySelectorAll('.code-editor')) {
+						const ed = CodeMirror.fromTextArea(el, {
+								lineNumbers: true,
+								keyMap: 'vim',
+								extraKeys: {
+										"F11": (cm) => {
+												cm.setOption("fullScreen", !cm.getOption("fullScreen"))
+										},
 								},
-						},
-				});
-				ed.on('change', () => ed.save());
-				codeMirrors.set(el, ed)
+						});
+						ed.on('change', () => ed.save());
+						codeMirrors.set(el, ed)
+				}
+		}, 500)
+		for(let button of document.querySelectorAll('.run')) {
+				const codeEl = button.nextElementSibling
+				if(!codeEl.matches('.code-editor'))
+						continue;
+				const dependsOnEditors = !codeEl.dataset.depends ? [] : Array.from(document.querySelectorAll(codeEl.dataset.depends))
+				const editorsToRun = [...dependsOnEditors, codeEl]
+				button.addEventListener('click', () =>{
+						const codeToRun = editorsToRun.map(ce => ce.value).join('\n;')
+						console.clear()
+						eval(`{
+		${codeToRun}
+		}`)
+				})
 		}
-}, 500)
-for(let button of document.querySelectorAll('.run')) {
-		const codeEl = button.nextElementSibling
-		if(!codeEl.matches('.code-editor'))
-				continue;
-		const dependsOnEditors = !codeEl.dataset.depends ? [] : Array.from(document.querySelectorAll(codeEl.dataset.depends))
-		const editorsToRun = [...dependsOnEditors, codeEl]
-		button.addEventListener('click', () =>{
-				const codeToRun = editorsToRun.map(ce => ce.value).join('\n;')
-				console.clear()
-				eval(`{
-${codeToRun}
-}`)
-		})
-}
-}</script>
+		}</script>
