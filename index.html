@@ -425,6 +425,80 @@ const showTopRecords = async function () {
 						</aside>
 				</section>
 
+				<section>
+						<section id="about-debounce">
+								<h1 class="small">In search of a better debounce</h1>
+								<button id="debounce-target">Click Here to Alert</button>
+								<figure>
+										<figcaption>How a debounced action works</figcaption>
+										<ul style="font-size:.8em">
+												<li>Wait for button click</li>
+												<li>
+														Start a timer and wait for either it or button click
+														<ul>
+																<li>If the next thing that happens is another click, restart the timer</li>
+														</ul>
+												</li>
+												<li>Run action</li>
+												<li>Start over</li>
+										</ul>
+								</figure>
+								<hr>
+								<figure>
+										<figcaption>How a debounced action is implemented</figcaption>
+										<textarea class="code-editor" mode="javascript" data-autorun="true">
+let currentTimeout = null
+document.querySelector('#debounce-target').addEventListener('click', () => {
+		if(currentTimeout)
+				clearTimeout(currentTimeout)
+		currentTimeout = setTimeout(() => {
+				alert("You clicked it then stopped!")
+		}, 2000)
+})
+										</textarea>
+								</figure>
+						</section>
+						<section id="underscorejs-debounce">
+								<h1 class="small">And here's how underscore does a generic one</h1>
+								<textarea class="code-editor" mode="javascript">
+_.debounce = function(func, wait, immediate) {
+		var timeout, args, context, timestamp, result;
+
+		var later = function() {
+			var last = _.now() - timestamp;
+
+			if (last < wait && last >= 0) {
+				timeout = setTimeout(later, wait - last);
+			} else {
+				timeout = null;
+				if (!immediate) {
+					result = func.apply(context, args);
+					if (!timeout) context = args = null;
+				}
+			}
+		};
+
+		return function() {
+			context = this;
+			args = arguments;
+			timestamp = _.now();
+			var callNow = immediate && !timeout;
+			if (!timeout) timeout = setTimeout(later, wait);
+			if (callNow) {
+				result = func.apply(context, args);
+				context = args = null;
+			}
+
+			return result;
+		};
+};
+								</textarea>
+								<p style="text-transform: uppercase">
+										What is even going on!?
+								</p>
+						</section>
+				</section>
+
 		</div>
 </div>
 
@@ -451,6 +525,18 @@ const showTopRecords = async function () {
 						codeMirrors.get(el) && codeMirrors.get(el).refresh()
 		} );
 
+		const runEditor = codeEl => {
+				if(!codeEl.matches('.code-editor'))
+						return;
+				const dependsOnEditors = !codeEl.dataset.depends ? [] : Array.from(document.querySelectorAll(codeEl.dataset.depends))
+				const editorsToRun = [...dependsOnEditors, codeEl]
+						const codeToRun = editorsToRun.map(ce => ce.value).join('\n;\n')
+						console.clear()
+						eval(`{
+${codeToRun}
+}`)
+		}
+
 		setTimeout(() => {
 				for(let el of document.querySelectorAll('.code-editor')) {
 						const ed = CodeMirror.fromTextArea(el, {
@@ -464,20 +550,11 @@ const showTopRecords = async function () {
 						});
 						ed.on('change', () => ed.save());
 						codeMirrors.set(el, ed)
+						if(el.dataset.autorun === 'true')
+								runEditor(el)
 				}
 		}, 500)
 		for(let button of document.querySelectorAll('.run')) {
-				const codeEl = button.nextElementSibling
-				if(!codeEl.matches('.code-editor'))
-						continue;
-				const dependsOnEditors = !codeEl.dataset.depends ? [] : Array.from(document.querySelectorAll(codeEl.dataset.depends))
-				const editorsToRun = [...dependsOnEditors, codeEl]
-				button.addEventListener('click', () =>{
-						const codeToRun = editorsToRun.map(ce => ce.value).join('\n;')
-						console.clear()
-						eval(`{
-		${codeToRun}
-		}`)
-				})
+				button.addEventListener('click', () => runEditor(button.nextElementSibling))
 		}
 		}</script>
