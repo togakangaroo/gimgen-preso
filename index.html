@@ -326,7 +326,7 @@ const delayedIncrementingRandoms = function * () {
 		}
 }
 
-const runYieldedPromises = (createIterator) => {
+const runAsync = (createIterator) => {
 		const it = createIterator()
 		const runNext = ({done, value: promise}) => {
 				if(done) return;
@@ -335,11 +335,64 @@ const runYieldedPromises = (createIterator) => {
 		runNext(it.next())
 }
 
-runYieldedPromises(delayedIncrementingRandoms)
+runAsync(delayedIncrementingRandoms)
 								</textarea>
 						</section>
-				</section>
 
+						<section id="unwind-yielded-async">
+								<h1 class="small">You can use this with anything async</h1>
+								<textarea class="code-editor" mode="javascript">
+const async = (createIterator) => (...args) => runAsync(...args)
+
+const get = async(function * (url) {
+		const result = yield fetch(url)
+		return result.json()
+})
+const showTopRecords = async(function * () {
+		const topRecords = yield get('/top-records')
+		const top3Records = topRecords.slice(0, 3)
+		const gettingTop3Details = top3Records.map((id) => get(`/top-records/details/${id}`))
+		const topDetails = yield Promise.all(gettingTop3Details)
+		const detailsHtml = template(topDetails)
+		$container.detailsHtml(detailsHtml)
+})
+								</textarea>
+						</section>
+
+						<section id="async-is-better-or-not">
+								<h1 class="small">Async...await was clearly a breakthrough</h1>
+								<div class="row">
+										<textarea class="code-editor" mode="javascript">
+const get = async(function * (url) {
+		const result = yield fetch(url)
+		return result.json()
+})
+const showTopRecords = async(function * () {
+		const topRecords = yield get('/top-records')
+		const top3Records = topRecords.slice(0, 3)
+		const gettingTop3Details = top3Records.map((id) => get(`/top-records/details/${id}`))
+		const topDetails = yield Promise.all(gettingTop3Details)
+		const detailsHtml = template(topDetails)
+		$container.detailsHtml(detailsHtml)
+})
+										</textarea>
+										<textarea class="code-editor" mode="javascript">
+const get = async function (url) {
+		const result = await fetch(url)
+		return result.json()
+}
+const showTopRecords = async function () {
+		const topRecords = await get('/top-records')
+		const top3Records = topRecords.slice(0, 3)
+		const gettingTop3Details = top3Records.map((id) => get(`/top-records/details/${id}`))
+		const topDetails = await Promise.all(gettingTop3Details)
+		const detailsHtml = template(topDetails)
+		$container.detailsHtml(detailsHtml)
+}
+										</textarea>
+								</div>
+						</section>
+				</section>
 
 		</div>
 </div>
@@ -350,11 +403,6 @@ runYieldedPromises(delayedIncrementingRandoms)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/javascript/javascript.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/keymap/vim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/addon/display/fullscreen.min.js"></script>
-<script>{
-const sampleCodes = document.querySelectorAll('.sample-code')
-for(let codeBlock of sampleCodes)
-				codeBlock.closest('section').querySelector('pre>code').textContent = codeBlock.innerHTML
-		}</script>
 		<script>{
 		Reveal.initialize({
 				history: true,
