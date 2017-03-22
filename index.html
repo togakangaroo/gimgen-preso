@@ -436,7 +436,7 @@ const showTopRecords = async function () {
 												<li>
 														Start a timer and wait for either it or button click
 														<ul>
-																<li>If the next thing that happens is another click, restart the timer</li>
+																<li>If the next thing that happens is another click, start waiting for tick or click again</li>
 														</ul>
 												</li>
 												<li>Run action</li>
@@ -448,7 +448,8 @@ const showTopRecords = async function () {
 										<figcaption>How a debounced action is implemented</figcaption>
 										<textarea class="code-editor" mode="javascript" data-autorun="true">
 let currentTimeout = null
-document.querySelector('#debounce-target').addEventListener('click', () => {
+const btn = document.querySelector('#debounce-target')
+btn.addEventListener('click', () => {
 		if(currentTimeout)
 				clearTimeout(currentTimeout)
 		currentTimeout = setTimeout(() => {
@@ -499,6 +500,41 @@ _.debounce = function(func, wait, immediate) {
 						</section>
 				</section>
 
+				<section>
+						<section id="basic-gimgen-debounce">
+								<h1 class="small">Finally, some gimgen</h1>
+								<button id="debounce-gimgen-target">Click Here to Alert</button>
+								<figure>
+										<ul style="font-size:.8em">
+												<li>Wait for button click</li>
+												<li>
+														Start a timer and wait for either it or button click
+														<ul>
+																<li>If the next thing that happens is another click, start waiting for tick or click again</li>
+														</ul>
+												</li>
+												<li>Run action</li>
+												<li>Start over</li>
+										</ul>
+								</figure>
+								<hr>
+								<textarea class="code-editor" mode="javascript" data-autorun="true">
+const { runGimgen, domEventToSignal, anySignal, timeoutSignal } = gimgen
+
+runGimgen(function * () {
+		const tick = timeoutSignal(2000)
+		const btn = document.querySelector('#debounce-gimgen-target')
+		const click = domEventToSignal(btn, 'click')
+		const tickOrClick = anySignal(tick, click)
+		while(true) {
+				yield click
+				while(click == (yield tickOrClick).signal) {}
+				alert("Gimgen says you clicked some stuff a while ago")
+		}
+})
+								</textarea>
+						</section>
+				</section>
 		</div>
 </div>
 
@@ -508,15 +544,16 @@ _.debounce = function(func, wait, immediate) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/javascript/javascript.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/keymap/vim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/addon/display/fullscreen.min.js"></script>
-		<script>{
+<script src="https://cdn.rawgit.com/togakangaroo/gimgen/v0.4.0/dist/gimgen.js"></script>
+
+<script>{
 		Reveal.initialize({
 				history: true,
 				dependencies: [
 						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.min.js', async: true, callback:() => hljs.initHighlightingOnLoad() },
 						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/marked.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
 						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/markdown.min.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
-						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/zoom-js/zoom.min.js', async: true },
-						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/notes/notes.min.js', async: true },
+						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/zoom-js/zoom.min.js', async: true }, { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/notes/notes.min.js', async: true },
 				]
 		});
 		const codeMirrors = new Map()
@@ -557,4 +594,4 @@ ${codeToRun}
 		for(let button of document.querySelectorAll('.run')) {
 				button.addEventListener('click', () => runEditor(button.nextElementSibling))
 		}
-		}</script>
+}</script>
