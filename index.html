@@ -19,10 +19,7 @@
 		.small {
 				font-size: 80% !important;
 		}
-		.smaller {
-				font-size: 50% !important;
-		}
-		.smallest {
+		.smaller {font-size: 50% !important;} .smallest {
 				font-size: 35% !important;
 		}
 		#tabbed-uis h1 {
@@ -39,27 +36,26 @@
 						@togakangaroo - [http://georgemauer.net](http://georgemauer.net)
 				</section>
 
-				<section id="manual-iterator-implementation">
+				<section id="manual-iterator-implementation-slide">
 						<h1 class="smaller" >Iterators are Simple</h1>
-						<button class="run">Run</button>
-						<textarea class="code-editor" mode="javascript">
+						<textarea class="code-editor" mode="javascript" id="manual-iterator-implementation">
 const manualFibbonacci = () => {
 		let prev1 = 1, prev2 = 1, step = 0
 		return {
 				next: () => {
 						if(step > 100)
-								return {value: undefined, done: true}
+								return {value: undefined, done: true};
 						step += 1
 						if(step <= 2)
-								return {value: 1, done: false}
-						const value = prev1 + prev2
-						prev1 = prev2
-						prev2 = value
-						return {value, done: false}
+								return {value: 1, done: false};
+						[prev1, prev2] = [prev2, prev1 + prev2]
+						return {value: prev2, done: false};
 				}
 		}
 }
-
+						</textarea>
+						<button class="run">Run</button>
+						<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
 const fib = manualFibbonacci()
 console.log(fib.next())
 console.log(fib.next())
@@ -71,7 +67,7 @@ console.log(fib.next())
 				<section id="manual-iterator-usage">
 						<h1 class="small" >Iterators can be...well...iterated</h1>
 						<button class="run">Run</button>
-						<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation .code-editor">
+						<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
 const fibIterator = manualFibbonacci()
 let x
 while((x = fibIterator.next(), !x.done))
@@ -82,7 +78,7 @@ while((x = fibIterator.next(), !x.done))
 				<section id="for-iterator-usage">
 						<h1 class="small">Iterators can be used in loops</h1>
 						<button class="run">Run</button>
-						<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation .code-editor">
+						<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
 const thingToIterate = {}
 thingToIterate[Symbol.iterator] = manualFibbonacci
 
@@ -218,9 +214,11 @@ setTimeout(() => {
 		}
 }, 500)
 for(let button of document.querySelectorAll('.run')) {
-		const codeEditor = button.closest('section').querySelector('.code-editor')
-		const dependsOnEditors = !codeEditor.dataset.depends ? [] : Array.from(document.querySelectorAll(codeEditor.dataset.depends))
-		const editorsToRun = [...dependsOnEditors, codeEditor]
+		const codeEl = button.nextElementSibling
+		if(!codeEl.matches('.code-editor'))
+				continue;
+		const dependsOnEditors = !codeEl.dataset.depends ? [] : Array.from(document.querySelectorAll(codeEl.dataset.depends))
+		const editorsToRun = [...dependsOnEditors, codeEl]
 		button.addEventListener('click', () =>{
 				const codeToRun = editorsToRun.map(ce => ce.value).join('\n;')
 				console.clear()
