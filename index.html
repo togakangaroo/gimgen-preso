@@ -22,8 +22,21 @@
 		.smaller {font-size: 50% !important;} .smallest {
 				font-size: 35% !important;
 		}
-		#tabbed-uis h1 {
-				font-size: 90%;
+		.row {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+		}
+		#duck-tree-slide img {
+				flex-shrink: 1;
+				margin: 0;
+				margin-right: 10px;
+		}
+		.run {
+				margin: .5rem;
+				font-size: 1rem;
+				border-radius: 10px;
+				padding: .3rem 1rem;
 		}
 </style>
 <div class="reveal">
@@ -36,9 +49,11 @@
 						@togakangaroo - [http://georgemauer.net](http://georgemauer.net)
 				</section>
 
-				<section id="manual-iterator-implementation-slide">
-						<h1 class="smaller" >Iterators are Simple</h1>
-						<textarea class="code-editor" mode="javascript" id="manual-iterator-implementation">
+				<section>
+						<section id="manual-iterator-implementation-slide">
+								<h1 class="smaller" >Iterators are Simple(ish)</h1>
+								<div class="row">
+										<textarea class="code-editor" mode="javascript" id="manual-iterator-implementation">
 const manualFibbonacci = () => {
 		let prev1 = 1, prev2 = 1, step = 0
 		return {
@@ -53,105 +68,141 @@ const manualFibbonacci = () => {
 				}
 		}
 }
-						</textarea>
-						<button class="run">Run</button>
-						<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
+										</textarea>
+										<figure>
+										<button class="run">Run</button>
+										<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
 const fib = manualFibbonacci()
 console.log(fib.next())
 console.log(fib.next())
 console.log(fib.next())
 console.log(fib.next())
-						</textarea>
+										</textarea>
+												
+										</figure>
+								</div>
+						</section>
+
+						<section id="manual-iterator-usage">
+								<h1 class="small" >Iterators can be...well...iterated</h1>
+								<button class="run">Run</button>
+								<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
+		const fibIterator = manualFibbonacci()
+		let x
+		while((x = fibIterator.next(), !x.done))
+				console.log(x.value)
+								</textarea>
+						</section>
+
+						<section id="for-iterator-usage">
+								<h1 class="small">Iterators can be used in loops</h1>
+								<button class="run">Run</button>
+								<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
+		const thingToIterate = {}
+		thingToIterate[Symbol.iterator] = manualFibbonacci
+
+		for(let val of thingToIterate)
+				console.log(val)
+								</textarea>
+								<p>
+										Yup, you can make anything iterable!
+								</p>
+						</section>
 				</section>
 
-				<section id="manual-iterator-usage">
-						<h1 class="small" >Iterators can be...well...iterated</h1>
-						<button class="run">Run</button>
-						<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
-const fibIterator = manualFibbonacci()
-let x
-while((x = fibIterator.next(), !x.done))
-		console.log(x.value)
-						</textarea>
-				</section>
-
-				<section id="for-iterator-usage">
-						<h1 class="small">Iterators can be used in loops</h1>
-						<button class="run">Run</button>
-						<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
-const thingToIterate = {}
-thingToIterate[Symbol.iterator] = manualFibbonacci
-
-for(let val of thingToIterate)
-		console.log(val)
-						</textarea>
-						<p>
-								Yup, you can make anything iterable!
-						</p>
-				</section>
-
-				<section id="duck-tree-slide">
-						<h1 class="small">Lets talk about ducks</h1>
-						<img src="img/duck-family-tree.jpg" height="600"> <script type="js-later/text" id="duck-tree">
-								const duck = (name, children=[]) => ({name, children})
-								const fergus =
-								duck("Fergus", [
-										duck("Matilda"),
-										duck("Scrooge"),
-										duck("Hortense", [
-												duck("Donald"),
-												duck("Della", [
-														duck("Huey"),
-														duck("Dewey"),
-														duck("Louie"),
+				<section>
+						<section id="duck-tree-slide">
+								<h1 class="small">Lets talk about ducks</h1>
+								<div class="row">
+										<img src="img/duck-family-tree.jpg">
+										<textarea class="code-editor" id="duck-tree">
+												const duck = (name, children=[]) => ({name, children})
+												const fergus =
+												duck("Fergus", [
+														duck("Matilda"),
+														duck("Scrooge"),
+														duck("Hortense", [
+																duck("Donald"),
+																duck("Della", [
+																		duck("Huey"),
+																		duck("Dewey"),
+																		duck("Louie"),
+																])
+														]),
 												])
-										]),
-								])
-						</script>
-				</section>
+										</textarea>
+								</div>
+						</section>
 
-				<section id="manual-duck-iteration">
-						<h1 class="small" >Iterators can flatten</h1>
-						<button class="run">Run</button>
-						<textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
-const getAllManual = (root) => {
-		const stack = [root]
-		return {
-				next: () => {
-						if(!stack.length)
-								return {value: undefined, done: true}
-						const value = stack.pop()
-						for(let c of value.children)
-							stack.push(c)
-						return {value, done: false}
+						<section id="manual-duck-iteration">
+								<h1 class="small" >Iterators can flatten</h1>
+								<button class="run">Run</button>
+								<textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
+		const getAllManual = (root) => {
+				const stack = [root]
+				return {
+						next: () => {
+								if(!stack.length)
+										return {value: undefined, done: true}
+								const value = stack.pop()
+								for(let c of value.children)
+										stack.push(c)
+								return {value, done: false}
+						}
 				}
 		}
-}
 
-fergus[Symbol.iterator] = () => getAllManual(fergus)
-for(let {name} of fergus)
-	console.log(name)
-						</textarea>
+		fergus[Symbol.iterator] = () => getAllManual(fergus)
+		for(let {name} of fergus)
+		console.log(name)
+								</textarea>
+						</section>
+						
 				</section>
 
 				<section id="generator-fibonacci">
 						<h1 class="small" >Generators are a simpler iterator syntax</h1>
-						<button class="run">Run</button>
-						<textarea class="code-editor" mode="javascript">
-const fibonacci = function * () {
-		let prev1 = 1
-		let prev2 = 2
-		yield prev1
-		yield prev2
-		for(let i = 0; i < 98; i+=1) {
-				[prev1, prev2]  = [prev2, prev1 + prev2]
-				yield prev2
-		}
-}
+						<div class="row">
+								<figure>
+										<button class="run">Run</button>
+										<textarea class="code-editor" mode="javascript">
+				const fibonacci = function * () {
+						let prev1 = 1
+						let prev2 = 1
+						yield prev1
+						yield prev2
+						for(let i = 0; i < 98; i+=1) {
+								[prev1, prev2] = [prev2, prev1 + prev2]
+								yield prev2
+						}
+				}
 
-for(let v of fibonacci())
-	console.log(v)
-						</textarea>
+				for(let v of fibonacci())
+				console.log(v)
+										</textarea>
+								</figure>
+								<p>
+										==
+								</p>
+								<figure>
+										<textarea class="code-editor" mode="javascript">
+		const manualFibbonacci = () => {
+				let prev1 = 1, prev2 = 1, step = 0
+				return {
+						next: () => {
+								if(step > 100)
+										return {value: undefined, done: true};
+								step += 1
+								if(step <= 2)
+										return {value: 1, done: false};
+								[prev1, prev2] = [prev2, prev1 + prev2]
+								return {value: prev2, done: false};
+						}
+				}
+		}
+										</textarea>
+								</figure>
+						</div>
 				</section>
 
 				<section id="generator-duck-iteration">
@@ -199,7 +250,7 @@ Reveal.addEventListener( 'slidechanged', ({currentSlide}) => {
 } );
 
 setTimeout(() => {
-		for(let el of document.querySelectorAll('textarea.code-editor')) {
+		for(let el of document.querySelectorAll('.code-editor')) {
 				const ed = CodeMirror.fromTextArea(el, {
 						lineNumbers: true,
 						keyMap: 'vim',
