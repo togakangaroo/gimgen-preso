@@ -43,15 +43,15 @@
 						<h1 class="smaller" >Iterators are Simple</h1>
 						<button class="run">Run</button>
 						<textarea class="code-editor" mode="javascript">
-const manualFibbonacci = (...args) => {
+const manualFibbonacci = () => {
 		let prev1 = 1, prev2 = 1, step = 0
 		return {
 				next: () => {
-						step += 1
-						if(step <2)
-								return {value: 1, done: false}
 						if(step > 100)
 								return {value: undefined, done: true}
+						step += 1
+						if(step <= 2)
+								return {value: 1, done: false}
 						const value = prev1 + prev2
 						prev1 = prev2
 						prev2 = value
@@ -59,6 +59,12 @@ const manualFibbonacci = (...args) => {
 				}
 		}
 }
+
+const fib = manualFibbonacci()
+console.log(fib.next())
+console.log(fib.next())
+console.log(fib.next())
+console.log(fib.next())
 						</textarea>
 				</section>
 
@@ -90,20 +96,19 @@ for(let val of thingToIterate)
 
 				<section id="duck-tree-slide">
 						<h1 class="small">Lets talk about ducks</h1>
-						<img src="img/duck-family-tree.jpg" height="600">
-						<script type="js-later/text" id="duck-tree">
+						<img src="img/duck-family-tree.jpg" height="600"> <script type="js-later/text" id="duck-tree">
 								const duck = (name, children=[]) => ({name, children})
 								const fergus =
 								duck("Fergus", [
 										duck("Matilda"),
 										duck("Scrooge"),
 										duck("Hortense", [
-										duck("Donald"),
-										duck("Della", [
-												duck("Huey"),
-												duck("Dewey"),
-												duck("Louie"),
-										])
+												duck("Donald"),
+												duck("Della", [
+														duck("Huey"),
+														duck("Dewey"),
+														duck("Louie"),
+												])
 										]),
 								])
 						</script>
@@ -119,17 +124,37 @@ const getAllManual = (root) => {
 				next: () => {
 						if(!stack.length)
 								return {value: undefined, done: true}
-					  const value = stack.pop()
+						const value = stack.pop()
 						for(let c of value.children)
 							stack.push(c)
 						return {value, done: false}
-
 				}
 		}
 }
+
 fergus[Symbol.iterator] = () => getAllManual(fergus)
 for(let {name} of fergus)
 	console.log(name)
+						</textarea>
+				</section>
+
+				<section id="generator-fibonacci">
+						<h1 class="small" >Generators are a simpler iterator syntax</h1>
+						<button class="run">Run</button>
+						<textarea class="code-editor" mode="javascript">
+const fibonacci = function * () {
+		let prev1 = 1
+		let prev2 = 2
+		yield prev1
+		yield prev2
+		for(let i = 0; i < 98; i+=1) {
+				[prev1, prev2]  = [prev2, prev1 + prev2]
+				yield prev2
+		}
+}
+
+for(let v of fibonacci())
+	console.log(v)
 						</textarea>
 				</section>
 
@@ -172,23 +197,25 @@ Reveal.initialize({
 		]
 });
 setTimeout(() => {
-		for(let el of document.querySelectorAll('textarea.code-editor'))
-				CodeMirror.fromTextArea(el, {
+		for(let el of document.querySelectorAll('textarea.code-editor')) {
+				const ed = CodeMirror.fromTextArea(el, {
 						lineNumbers: true,
 						keyMap: 'vim',
 						extraKeys: {
-						"F11": (cm) => {
-								cm.setOption("fullScreen", !cm.getOption("fullScreen"))
-						},
+								"F11": (cm) => {
+										cm.setOption("fullScreen", !cm.getOption("fullScreen"))
+								},
 						},
 				});
+				ed.on('change', () => ed.save());
+		}
 }, 500)
 for(let button of document.querySelectorAll('.run')) {
 		const codeEditor = button.closest('section').querySelector('.code-editor')
 		const dependsOnEditors = !codeEditor.dataset.depends ? [] : Array.from(document.querySelectorAll(codeEditor.dataset.depends))
 		const editorsToRun = [...dependsOnEditors, codeEditor]
 		button.addEventListener('click', () =>{
-				const codeToRun = editorsToRun.map(ce => ce.textContent).join('\n;')
+				const codeToRun = editorsToRun.map(ce => ce.value).join('\n;')
 				console.clear()
 				eval(`{
 ${codeToRun}
