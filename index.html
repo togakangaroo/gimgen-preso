@@ -138,22 +138,22 @@ console.log(fib.next())
 								<h1 class="small" >Iterators can flatten</h1>
 								<button class="run">Run</button>
 								<textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
-		const getAllManual = (root) => {
-				const stack = [root]
-				return {
-						next: () => {
-								if(!stack.length)
-										return {value: undefined, done: true}
-								const value = stack.pop()
-								for(let c of value.children)
-										stack.push(c)
-								return {value, done: false}
-						}
+const getAllManual = (root) => {
+		const stack = [root]
+		return {
+				next: () => {
+						if(!stack.length)
+								return {value: undefined, done: true}
+						const value = stack.pop()
+						for(let c of value.children)
+								stack.push(c)
+						return {value, done: false}
 				}
 		}
+}
 
-		fergus[Symbol.iterator] = () => getAllManual(fergus)
-		for(let {name} of fergus)
+fergus[Symbol.iterator] = () => getAllManual(fergus)
+for(let {name} of fergus)
 		console.log(name)
 								</textarea>
 						</section>
@@ -166,19 +166,18 @@ console.log(fib.next())
 								<figure>
 										<button class="run">Run</button>
 										<textarea class="code-editor" mode="javascript">
-				const fibonacci = function * () {
-						let prev1 = 1
-						let prev2 = 1
-						yield prev1
-						yield prev2
-						for(let i = 0; i < 98; i+=1) {
-								[prev1, prev2] = [prev2, prev1 + prev2]
-								yield prev2
-						}
-				}
+const fibonacci = function * () {
+		let prev1 = 1, prev2 = 1
+		yield prev1
+		yield prev2
+		for(let i = 0; i < 98; i+=1) {
+				[prev1, prev2] = [prev2, prev1 + prev2]
+				yield prev2
+		}
+}
 
-				for(let v of fibonacci())
-				console.log(v)
+for(let v of fibonacci())
+		console.log(v)
 										</textarea>
 								</figure>
 								<p>
