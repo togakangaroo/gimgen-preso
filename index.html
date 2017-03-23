@@ -534,7 +534,57 @@ runGimgen(function * () {
 })
 								</textarea>
 						</section>
+
+						<section id="basic-gimgen-debounce2">
+								<h1 class="small">You get to use some weird primitives</h1>
+								<button id="debounce-gimgen-target2">Click Here to Alert</button>
+								<figure>
+										<ul style="font-size:.8em">
+												<li>Wait for button click</li>
+												<li>
+														Start a timer and wait for either it or button click
+														<ul>
+																<li>If the next thing that happens is another click, start waiting for tick or click again</li>
+														</ul>
+												</li>
+												<li>Run action</li>
+												<li>Start over</li>
+										</ul>
+								</figure>
+								<hr>
+								<textarea class="code-editor" mode="javascript" data-autorun="true">
+const { runGimgen, domEventToSignal, anySignal, timeoutSignal } = gimgen
+
+runGimgen(function * () {
+		const tick = timeoutSignal(2000)
+		const btn = document.querySelector('#debounce-gimgen-target2')
+		const click = domEventToSignal(btn, 'click')
+		const tickOrClick = anySignal(tick, click)
+		while(true) {
+				yield click;
+				while(true) {
+						const {signal} = yield tickOrClick
+						if(tick == signal)
+								break;
+				}
+				alert("Gimgen says you clicked some stuff a while ago");
+		}
+})
+								</textarea>
+						</section>
 				</section>
+
+				<section id="more-examples" data-markdown>
+						# Let's look at more examples
+						[Demos](http://georgemauer.net/gimgen/)
+						[Library and Docs](https://github.com/togakangaroo/gimgen/)
+				</section>
+
+				<section id="i-dont-know">
+						<h1 class="small">I don't know what I have here</h1>
+						<img src="img/shruggies.jpg">
+				</section>
+
 		</div>
 </div>
 
