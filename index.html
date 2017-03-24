@@ -591,22 +591,25 @@ runGimgen(function * () {
 										<figure>
 												<button id="multiple-clicks-button">Click Here to Message Multiple Clicks in 2 seconds</button>
 												<textarea class="code-editor" mode="javascript" data-depends="#import-gimgen" data-autorun="true">
-const throttledMultipleClicks = controlSignal(function * ({emit}) {
-		const tick = timeoutSignal(2000)
-		const btn = document.querySelector('#multiple-clicks-button')
-		const click = domEventToSignal(btn, 'click')
-		let clicksSinceTick = []
-		while(true) {
-				const {signal, result} = yield anySignal(tick, click)
-				if(click == signal)
-						clicksSinceTick = [...clicksSinceTick, result]
-				else if(tick == signal && clicksSinceTick.length) {
-						const clicksToEmit = clicksSinceTick
-						clicksSinceTick = []
-						emit(clicksToEmit)
+const throttleAndAggregate = (ms, signalToThrottle) =>
+		controlSignal(function * ({emit}) {
+				const tick = timeoutSignal(ms)
+				let throttledSinceTick = []
+				while(true) {
+						const {signal, result} = yield anySignal(tick, signalToThrottle)
+						if(signalToThrottle == signal)
+								throttledSinceTick = [...throttledSinceTick, result]
+						else if(tick == signal && throttledSinceTick.length) {
+								const toEmit = throttledSinceTick
+								throttledSinceTick = []
+								emit(toEmit)
+						}
 				}
-		}
-})
+		})
+const throttledMultipleClicks = throttleAndAggregate(
+		2000,
+		domEventToSignal(document.querySelector('#multiple-clicks-button'), 'click')
+)
 const moreThanTwoThrottledClicks = controlSignal(function * ({emit}) {
 		while(true) {
 				const clicks = yield throttledMultipleClicks;
