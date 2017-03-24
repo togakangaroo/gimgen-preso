@@ -44,7 +44,8 @@
 
 				<section>
 						<section data-markdown id="main">
-								# gimgen
+								# what is
+								# gimgen?
 								----
 								George Mauer
 								@togakangaroo - [http://georgemauer.net](http://georgemauer.net)
@@ -428,7 +429,7 @@ const showTopRecords = async function () {
 				<section>
 						<section id="about-debounce">
 								<h1 class="small">In search of a better debounce</h1>
-								<button id="debounce-target">Click Here to Alert</button>
+								<button id="debounce-target">Click Here to Message</button>
 								<figure>
 										<figcaption>How a debounced action works</figcaption>
 										<ul style="font-size:.8em">
@@ -453,7 +454,7 @@ btn.addEventListener('click', () => {
 		if(currentTimeout)
 				clearTimeout(currentTimeout)
 		currentTimeout = setTimeout(() => {
-				alert("You clicked it then stopped!")
+				console.log("You clicked it then stopped!")
 		}, 2000)
 })
 										</textarea>
@@ -503,7 +504,7 @@ _.debounce = function(func, wait, immediate) {
 				<section>
 						<section id="basic-gimgen-debounce">
 								<h1 class="small">Finally, some gimgen</h1>
-								<button id="debounce-gimgen-target">Click Here to Alert</button>
+								<button id="debounce-gimgen-target">Click Here to Message</button>
 								<figure>
 										<ul style="font-size:.8em">
 												<li>Wait for button click</li>
@@ -529,15 +530,19 @@ runGimgen(function * () {
 		while(true) {
 				yield click
 				while(click == (yield tickOrClick).signal) {}
-				alert("Gimgen says you clicked some stuff a while ago")
+				console.log("Gimgen says you clicked some stuff a while ago")
 		}
 })
 								</textarea>
 						</section>
 
+						<script id="import-gimgen" type="text/non-executing-js">
+const { runGimgen, domEventToSignal, anySignal, timeoutSignal, promiseToSignal, createSignalFactory, controlSignal } = gimgen
+						</script>
+
 						<section id="basic-gimgen-debounce2">
 								<h1 class="small">You get to use some weird primitives</h1>
-								<button id="debounce-gimgen-target2">Click Here to Alert</button>
+								<button id="debounce-gimgen-target2">Click Here to Message</button>
 								<figure>
 										<ul style="font-size:.8em">
 												<li>Wait for button click</li>
@@ -567,16 +572,66 @@ runGimgen(function * () {
 						if(tick == signal)
 								break;
 				}
-				alert("Gimgen says you clicked some stuff a while ago");
+				console.log("Gimgen says you clicked some stuff a while ago");
 		}
 })
 								</textarea>
 						</section>
+
+
+						<section id="implement-that-frp-chart">
+								<style>
+										#implement-that-frp-chart .CodeMirror {
+												height: initial !important;
+										}
+								</style>
+								<h1 class="small">The same stream</h1>
+								<div class="row">
+										<img src="img/bubble-chart.png" height="550" >
+										<figure>
+												<button id="multiple-clicks-button">Click Here to Message Multiple Clicks in 2 seconds</button>
+												<textarea class="code-editor" mode="javascript" data-depends="#import-gimgen" data-autorun="true">
+const throttledMultipleClicks = controlSignal(function * ({emit}) {
+		const tick = timeoutSignal(2000)
+		const btn = document.querySelector('#multiple-clicks-button')
+		const click = domEventToSignal(btn, 'click')
+		let clicksSinceTick = []
+		while(true) {
+				const {signal, result} = yield anySignal(tick, click)
+				if(click == signal)
+						clicksSinceTick = [...clicksSinceTick, result]
+				else if(tick == signal && clicksSinceTick.length) {
+						const clicksToEmit = clicksSinceTick
+						clicksSinceTick = []
+						emit(clicksToEmit)
+				}
+		}
+})
+const moreThanTwoThrottledClicks = controlSignal(function * ({emit}) {
+		while(true) {
+				const clicks = yield throttledMultipleClicks;
+				if(clicks.length > 2)
+						emit(clicks.length)
+		}
+})
+runGimgen(function * () {
+		while(true) {
+				const clickCount = yield moreThanTwoThrottledClicks
+				console.log(`received ${clickCount} clicks`)
+		}
+})
+												</textarea>
+										</figure>
+								</div>
+						</section>
+				</section>
 				</section>
 
 				<section id="more-examples" data-markdown>
 						# Let's look at more examples
+						---
 						[Demos](http://georgemauer.net/gimgen/)
+						
 						[Library and Docs](https://github.com/togakangaroo/gimgen/)
 				</section>
 
@@ -617,7 +672,7 @@ runGimgen(function * () {
 						return;
 				const dependsOnEditors = !codeEl.dataset.depends ? [] : Array.from(document.querySelectorAll(codeEl.dataset.depends))
 				const editorsToRun = [...dependsOnEditors, codeEl]
-						const codeToRun = editorsToRun.map(ce => ce.value).join('\n;\n')
+						const codeToRun = editorsToRun.map(ce => ce.value || ce.textContent).join('\n;\n')
 						console.clear()
 						eval(`{
 ${codeToRun}
