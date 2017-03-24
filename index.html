@@ -108,9 +108,8 @@ console.log(fib.next())
 								<button class="run">Run</button>
 								<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
 		const fibIterator = manualFibbonacci()
-		let x
-		while((x = fibIterator.next(), !x.done))
-				console.log(x.value)
+		// as long as its not done
+		// console.log(x.value)
 								</textarea>
 						</section>
 
@@ -162,12 +161,10 @@ const getAllManual = (root) => {
 		const stack = [root]
 		return {
 				next: () => {
-						if(!stack.length)
-								return {value: undefined, done: true}
-						const value = stack.pop()
-						for(let c of value.children)
-								stack.push(c)
-						return {value, done: false}
+						// if the stack is empty, you're done
+						// take the top value off the stack
+						// for each of its children add them to the stack
+						// return the taken value as the current one
 				}
 		}
 }
@@ -208,12 +205,9 @@ const manualfibbonacci = () => {
 										<textarea class="code-editor" mode="javascript">
 const fibonacci = function * () {
 		let prev1 = 1, prev2 = 1
-		yield prev1
-		yield prev2
-		for(let i = 0; i < 98; i+=1) {
-				[prev1, prev2] = [prev2, prev1 + prev2]
-				yield prev2
-		}
+		// yield back prev1
+		// yield back prev2
+		// 98 times, do the switch and yield back prev2
 }
 
 for(let v of fibonacci())
@@ -244,9 +238,7 @@ const manualFibbonacci = () => {
 }
 
 const it = manualFibbonacci()
-for(let i = 0; i < 100; i+=1)
-		it.next()
-console.log(it.next())
+// Get the 101st value only
 												</textarea>
 										</figure>
 										<p>
@@ -266,9 +258,7 @@ const fibbonacci = function * () {
 }
 
 const it = fibbonacci()
-for(let i = 0; i < 100; i+=1)
-		it.next()
-console.log(it.next())
+// Get the 101st value only
 												</textarea>
 										</figure>
 								</div>
@@ -279,9 +269,7 @@ console.log(it.next())
 								<button class="run">Run</button>
 								<textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
 const getAll = function * (root) {
-		yield root
-		for(let c of root.children)
-				yield * getAll(c)
+		// flatten them ducks
 }
 for(let {name} of getAll(fergus))
 	console.log(name)
@@ -332,6 +320,11 @@ logAndTakeEveryMs(500, incrementingRandoms)
 						</section>
 
 						<section id="count-with-promises">
+								<style>
+								 #count-with-promises .CodeMirror {
+										height: auto !important;
+									}
+								</style>
 								<h1 class="small">Now with...promises!</h1>
 								<button class="run">run</button>
 								<textarea class="code-editor" mode="javascript">
@@ -342,16 +335,15 @@ const delayedIncrementingRandoms = function * () {
 				val = rand(val+1000, val+1)
 				console.log("Currently", val)
 				yield new Promise(resolve =>
-						setTimeout(() => resolve(val), 300)
-				)
+						setTimeout(() => resolve(val), 300))
 		}
 }
 
 const runAsync = (createIterator) => {
 		const it = createIterator()
 		const runNext = ({done, value: promise}) => {
-				if(done) return;
-				promise.then(() => runNext(it.next()))
+				// if you're not done, call runNext when
+				// promise completes
 		}
 		runNext(it.next())
 }
@@ -552,8 +544,7 @@ const { runGimgen, domEventToSignal, anySignal, timeoutSignal, promiseToSignal, 
 																<li>If the next thing that happens is another click, start waiting for tick or click again</li>
 														</ul>
 												</li>
-												<li>Run action</li>
-												<li>Start over</li>
+												<li>Run action</li> <li>Start over</li>
 										</ul>
 								</figure>
 								<hr>
