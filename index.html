@@ -300,21 +300,52 @@ for(let i = 0; i < 10; i+=1)
 						</section>
 				</section>
 
-        <section>
-            <section id="fibbonacci-problem">
-                <h1 class="small">Fibonnaci Sequence Problem</h1>
-                <p>
-                    <a href="https://www.freecodecamp.org/challenges/sum-all-odd-fibonacci-numbers">FreeCodeCamp Challenge</a>
-                </p>
-                <p>
-                    Given a positive integer num, return the sum of all odd Fibonacci numbers that are less than or equal to num.
-                </p>
-            </section>
-            <section id="fibonacci-stream-plan">
-                <h1 class="smaller">The Plan (numbers &lt;= 10)</h1>
-                <img src="img/fibonacci-odds-stream.jpg">
-            </section>
-        </section>
+				<section>
+						<section id="fibbonacci-problem">
+								<h1 class="small">Fibonnaci Sequence Problem</h1>
+								<p>
+										<a href="https://www.freecodecamp.org/challenges/sum-all-odd-fibonacci-numbers">FreeCodeCamp Challenge</a>
+								</p>
+								<p>
+										Given a positive integer num, return the sum of all odd Fibonacci numbers that are less than or equal to num.
+								</p>
+						</section>
+						<section id="fibonacci-stream-plan">
+								<h1 class="smaller">The Plan (numbers &lt;= 10)</h1>
+								<img src="img/fibonacci-odds-stream.jpg">
+						</section>
+						<section>
+								<textarea id="generatior-fibonacci-implementation" style="display:none">
+const fibonacci = function * () {
+		let prev1 = 0, prev2 = 1
+		yield prev1
+		yield prev2
+		while(true) {
+				[prev1, prev2] = [prev2, prev1+prev2]
+				yield prev2
+		}
+}
+								</textarea>
+								<button class="run">Run</button>
+								<textarea class="code-editor" mode="javascript" data-depends="#generatior-fibonacci-implementation">
+const oddsOnly = function * (sequence) {
+}
+const takeWhile = function * (test, sequence) {
+}
+const runningTotal = function * (sequence) {
+}
+const last = function (sequence) {
+}
+console.log(
+		last(runningTotal(
+				takeWhile(n => n < 10,
+						oddsOnly(fibonacci())
+				)
+		))
+)
+								</textarea>
+						</section>
+				</section>
 
 				<section>
 						<section id="you-choose-how-it-runs">
