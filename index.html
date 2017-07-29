@@ -314,8 +314,8 @@ for(let i = 0; i < 10; i+=1)
 								<h1 class="smaller">The Plan (numbers &lt;= 10)</h1>
 								<img src="img/fibonacci-odds-stream.jpg">
 						</section>
-						<section>
-								<textarea id="generatior-fibonacci-implementation" style="display:none">
+						<section style="top: 60px" id="implement-fcc-problem">
+								<textarea id="generator-fibonacci-implementation" style="display:none">
 const fibonacci = function * () {
 		let prev1 = 0, prev2 = 1
 		yield prev1
@@ -327,7 +327,7 @@ const fibonacci = function * () {
 }
 								</textarea>
 								<button class="run">Run</button>
-								<textarea class="code-editor" mode="javascript" data-depends="#generatior-fibonacci-implementation">
+								<textarea class="code-editor" mode="javascript" data-depends="#generator-fibonacci-implementation">
 const oddsOnly = function * (sequence) {
 }
 const takeWhile = function * (test, sequence) {
@@ -344,6 +344,11 @@ console.log(
 		))
 )
 								</textarea>
+								<style>
+										#implement-fcc-problem .CodeMirror {
+												height: 38em;
+										}
+								</style>
 						</section>
 				</section>
 
