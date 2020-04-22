@@ -1,649 +1,663 @@
-<head>
-</head>
+<meta charset="UTF-8">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/reveal.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/theme/white.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/addon/display/fullscreen.css"/>
 <style>
-		code, .CodeMirror {
-				tab-size: .5em;
-		}
-		.CodeMirror {
-				font-size: .3em !important;
-		}
+ code, .CodeMirror {
+     tab-size: .5em;
+ }
+ .CodeMirror {
+     font-size: .3em !important;
+ }
 
-		.CodeMirror pre {
-				box-shadow: none;
-		}
-		.small {
-				font-size: 80% !important;
-		}
-		.smaller {font-size: 50% !important;} .smallest {
-				font-size: 35% !important;
-		}
-		.row {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-		}
-		#duck-tree-slide img {
-				flex-shrink: 1;
-				margin: 0;
-				margin-right: 10px;
-		}
-		.run {
-				margin: .5rem;
-				font-size: 1rem;
-				border-radius: 10px;
-				padding: .3rem 1rem;
-		}
+ .CodeMirror pre {
+     box-shadow: none;
+ }
+ .small {
+     font-size: 80% !important;
+ }
+ .smaller {font-size: 50% !important;} .smallest {
+     font-size: 35% !important;
+ }
+ .row {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+ .stack {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+ }
+ #duck-tree-slide img {
+     flex-shrink: 1;
+     margin: 0;
+     margin-right: 10px;
+ }
+ .run {
+     margin: .5rem;
+     font-size: 1rem;
+     border-radius: 10px;
+     padding: .3rem 1rem;
+ }
 </style>
 <div class="reveal">
-		<div class="slides">
+    <div class="slides">
 
-				<section>
-						<section data-markdown id="main">
-								# what is
-								# gimgen?
-								----
-								George Mauer
-								@togakangaroo - [http://georgemauer.net](http://georgemauer.net)
-						</section>
+        <section>
+            <section data-markdown id="main">
+                # what is
+                # gimgen?
+                ----
+                George Mauer
+                @togakangaroo - [http://georgemauer.net](http://georgemauer.net)
+            </section>
 
-						<section id="me">
-								<h1 style="font-size: 1.5em">Me</h1>
-								<div class="row" style="justify-content: center">
-										<img src="img/me.jpg" height="600">
-								</div>
-						</section>
+            <section id="me">
+                <div class="row">
+                    <section>
+                        <h1 style="font-size: 1.5em">Me ⮕</h1>
+                        <div class="stack">
+                            <div>
+                                I'm CTO at
+                            </div>
+                            <a href="https://operationspark.org">Operation Spark</a>
+                        </div>
+                    </section>
+                    <div class="row" style="justify-content: center">
+                        <img src="img/me.jpg" height="600">
+                    </div>
+                </div>
+            </section>
 
-						<section id="you-after-this">
-								<h1 style="font-size: 1.5em">You, after this talk</h1>
-								<div class="row">
-										<img src="img/happy.png">
-										<p>
-												OR
-										</p>
-										<img src="img/sad-angry.png">
-								</div>
-						</section>
-				</section>
+            <section id="you-after-this">
+                <h1 style="font-size: 1.5em">You, after this talk</h1>
+                <div class="row">
+                    <img src="img/happy.png">
+                    <p>
+                        OR
+                    </p>
+                    <img src="img/sad-angry.png">
+                </div>
+            </section>
+        </section>
 
-				<section>
-						<section id="manual-iterator-implementation-slide">
-								<h1 class="smaller" >Iterators are Simple(ish)</h1>
-								<div class="row">
-										<textarea class="code-editor" mode="javascript" id="manual-iterator-implementation">
+        <section>
+            <section id="manual-iterator-implementation-slide">
+                <h1 class="smaller" >Iterators are Simple(ish)</h1>
+                <div class="row">
+                    <textarea class="code-editor" mode="javascript" id="manual-iterator-implementation">
 const manualFibbonacci = () => {
-		let prev1 = 1, prev2 = 1, step = 0
-		return {
-				next: () => {
-						if(step > 100)
-								return {value: undefined, done: true};
-						step += 1
-						if(step <= 2)
-								return {value: 1, done: false};
-						[prev1, prev2] = [prev2, prev1 + prev2]
-						return {value: prev2, done: false};
-				}
-		}
+    let prev1 = 1, prev2 = 1, step = 0
+    return {
+        next: () => {
+            if(step > 100)
+                return {value: undefined, done: true};
+            step += 1
+            if(step <= 2)
+                return {value: 1, done: false};
+            [prev1, prev2] = [prev2, prev1 + prev2]
+            return {value: prev2, done: false};
+        }
+    }
 }
-										</textarea>
-										<figure>
-												<button class="run">Run</button>
-												<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
+                    </textarea>
+                    <figure>
+                        <button class="run">Run</button>
+                        <textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
 const fib = manualFibbonacci()
 console.log(fib.next())
 console.log(fib.next())
 console.log(fib.next())
 console.log(fib.next())
-												</textarea>
-										</figure>
-								</div>
-						</section>
+                        </textarea>
+                    </figure>
+                </div>
+            </section>
 
-						<section id="manual-iterator-usage">
-								<h1 class="small" >Iterators can be...well...iterated</h1>
-								<button class="run">Run</button>
-								<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
-		const fibIterator = manualFibbonacci()
-		let x
-		while((x = fibIterator.next(), !x.done))
-				console.log(x.value)
-								</textarea>
-						</section>
+            <section id="manual-iterator-usage">
+                <h1 class="small" >Iterators can be...well...iterated</h1>
+                <button class="run">Run</button>
+                <textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
+    const fibIterator = manualFibbonacci()
+    let x
+    while((x = fibIterator.next(), !x.done))
+        console.log(x.value)
+                </textarea>
+            </section>
 
-						<section id="for-iterator-usage">
-								<h1 class="small">Iterators can be used in loops</h1>
-								<button class="run">Run</button>
-								<textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
-		const thingToIterate = {}
-		thingToIterate[Symbol.iterator] = manualFibbonacci
+            <section id="for-iterator-usage">
+                <h1 class="small">Iterators can be used in loops</h1>
+                <button class="run">Run</button>
+                <textarea class="code-editor" mode="javascript" data-depends="#manual-iterator-implementation">
+    const thingToIterate = {}
+    thingToIterate[Symbol.iterator] = manualFibbonacci
 
-		for(let val of thingToIterate)
-				console.log(val)
-								</textarea>
-								<p>
-										Yup, you can make anything iterable!
-								</p>
-						</section>
-				</section>
+    for(let val of thingToIterate)
+        console.log(val)
+                </textarea>
+                <p>
+                    Yup, you can make anything iterable!
+                </p>
+            </section>
+        </section>
 
-				<section>
-						<section id="duck-tree-slide">
-								<h1 class="small">Lets talk about ducks</h1>
-								<div class="row">
-										<img src="img/duck-family-tree.jpg">
-										<textarea class="code-editor" id="duck-tree">
-												const duck = (name, children=[]) => ({name, children})
-												const fergus =
-												duck("Fergus", [
-														duck("Matilda"),
-														duck("Scrooge"),
-														duck("Hortense", [
-																duck("Donald"),
-																duck("Della", [
-																		duck("Huey"),
-																		duck("Dewey"),
-																		duck("Louie"),
-																])
-														]),
-												])
-										</textarea>
-								</div>
-						</section>
+        <section>
+            <section id="duck-tree-slide">
+                <h1 class="small">Lets talk about ducks</h1>
+                <div class="row">
+                    <img src="img/duck-family-tree.jpg">
+                    <textarea class="code-editor" id="duck-tree">
+                        const duck = (name, children=[]) => ({name, children})
+                        const fergus =
+                        duck("Fergus", [
+                            duck("Matilda"),
+                            duck("Scrooge"),
+                            duck("Hortense", [
+                                duck("Donald"),
+                                duck("Della", [
+                                    duck("Huey"),
+                                    duck("Dewey"),
+                                    duck("Louie"),
+                                ])
+                            ]),
+                        ])
+                    </textarea>
+                </div>
+            </section>
 
-						<section id="manual-duck-iteration">
-								<h1 class="small" >Iterators can flatten</h1>
-								<button class="run">Run</button>
-								<textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
+            <section id="manual-duck-iteration">
+                <h1 class="small" >Iterators can flatten</h1>
+                <button class="run">Run</button>
+                <textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
 const getAllManual = (root) => {
-		const stack = [root]
-		return {
-				next: () => {
-						if(!stack.length)
-								return {value: undefined, done: true}
-						const value = stack.pop()
-						for(let c of value.children)
-								stack.push(c)
-						return {value, done: false}
-				}
-		}
+    const stack = [root]
+    return {
+        next: () => {
+            if(!stack.length)
+                return {value: undefined, done: true}
+            const value = stack.pop()
+            for(let c of value.children)
+                stack.push(c)
+            return {value, done: false}
+        }
+    }
 }
 
 fergus[Symbol.iterator] = () => getAllManual(fergus)
 for(let {name} of fergus)
-		console.log(name)
-								</textarea>
-						</section>
-				</section>
+    console.log(name)
+                </textarea>
+            </section>
+        </section>
 
-				<section id="generator-fibonacci">
-						<h1 class="small" >generators are a simpler iterator syntax</h1>
-						<div class="row">
-								<figure>
-										<textarea class="code-editor" mode="javascript">
+        <section id="generator-fibonacci">
+            <h1 class="small" >generators are a simpler iterator syntax</h1>
+            <div class="row">
+                <figure>
+                    <textarea class="code-editor" mode="javascript">
 const manualfibbonacci = () => {
-		let prev1 = 1, prev2 = 1, step = 0
-		return {
-				next: () => {
-						if(step > 100)
-								return {value: undefined, done: true};
-						step += 1
-						if(step <= 2)
-								return {value: 1, done: false};
-						[prev1, prev2] = [prev2, prev1 + prev2]
-						return {value: prev2, done: false};
-				}
-		}
+    let prev1 = 1, prev2 = 1, step = 0
+    return {
+        next: () => {
+            if(step > 100)
+                return {value: undefined, done: true};
+            step += 1
+            if(step <= 2)
+                return {value: 1, done: false};
+            [prev1, prev2] = [prev2, prev1 + prev2]
+            return {value: prev2, done: false};
+        }
+    }
 }
-										</textarea>
-								</figure>
-								<p>
-										==
-								</p>
-								<figure>
-										<button class="run">run</button>
-										<textarea class="code-editor" mode="javascript">
+                    </textarea>
+                </figure>
+                <p>
+                    ==
+                </p>
+                <figure>
+                    <button class="run">run</button>
+                    <textarea class="code-editor" mode="javascript">
 const fibonacci = function * () {
-		let prev1 = 1, prev2 = 1
-		yield prev1
-		yield prev2
-		for(let i = 0; i < 98; i+=1) {
-				[prev1, prev2] = [prev2, prev1 + prev2]
-				yield prev2
-		}
+    let prev1 = 1, prev2 = 1
+    yield prev1
+    yield prev2
+    for(let i = 0; i < 98; i+=1) {
+        [prev1, prev2] = [prev2, prev1 + prev2]
+        yield prev2
+    }
 }
 
 for(let v of fibonacci())
-		console.log(v)
-										</textarea>
-								</figure>
-						</div>
-				</section>
+    console.log(v)
+                    </textarea>
+                </figure>
+            </div>
+        </section>
 
-				<section>
-						<section id="generator-fibbonacci-infinite">
-								<h1 class="small">Oh yeah, iterators can be infinite!</h1>
-								<div class="row">
-										<figure>
-												<button class="run">run</button>
-												<textarea class="code-editor" mode="javascript">
+        <section>
+            <section id="generator-fibbonacci-infinite">
+                <h1 class="small">Oh yeah, iterators can be infinite!</h1>
+                <div class="row">
+                    <figure>
+                        <button class="run">run</button>
+                        <textarea class="code-editor" mode="javascript">
 const manualFibbonacci = () => {
-		let prev1 = 1, prev2 = 1, step = 0
-		return {
-				next: () => {
-						step += 1
-						if(step <= 2)
-								return {value: 1, done: false};
-						[prev1, prev2] = [prev2, prev1 + prev2]
-						return {value: prev2, done: false};
-				}
-		}
+    let prev1 = 1, prev2 = 1, step = 0
+    return {
+        next: () => {
+            step += 1
+            if(step <= 2)
+                return {value: 1, done: false};
+            [prev1, prev2] = [prev2, prev1 + prev2]
+            return {value: prev2, done: false};
+        }
+    }
 }
 
 const it = manualFibbonacci()
 for(let i = 0; i < 100; i+=1)
-		it.next()
+    it.next()
 console.log(it.next())
-												</textarea>
-										</figure>
-										<p>
-												==
-										</p>
-										<figure>
-												<button class="run">run</button>
-												<textarea class="code-editor" mode="javascript">
+                        </textarea>
+                    </figure>
+                    <p>
+                        ==
+                    </p>
+                    <figure>
+                        <button class="run">run</button>
+                        <textarea class="code-editor" mode="javascript">
 const fibbonacci = function * () {
-		let prev1 = 1, prev2 = 1
-		yield prev1
-		yield prev2
-		while(true) {
-				[prev1, prev2] = [prev2, prev1 + prev2]
-				yield prev2
-		}
+    let prev1 = 1, prev2 = 1
+    yield prev1
+    yield prev2
+    while(true) {
+        [prev1, prev2] = [prev2, prev1 + prev2]
+        yield prev2
+    }
 }
 
 const it = fibbonacci()
 for(let i = 0; i < 100; i+=1)
-		it.next()
+    it.next()
 console.log(it.next())
-												</textarea>
-										</figure>
-								</div>
-						</section>
+                        </textarea>
+                    </figure>
+                </div>
+            </section>
 
-						<section id="generator-duck-iteration">
-								<h1 class="small" >Flattening ducks with generators</h1>
-								<button class="run">Run</button>
-								<textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
+            <section id="generator-duck-iteration">
+                <h1 class="small" >Flattening ducks with generators</h1>
+                <button class="run">Run</button>
+                <textarea class="code-editor" mode="javascript" data-depends="#duck-tree">
 const getAll = function * (root) {
-		yield root
-		for(let c of root.children)
-				yield * getAll(c)
+    yield root
+    for(let c of root.children)
+        yield * getAll(c)
 }
 for(let {name} of getAll(fergus))
-	console.log(name)
-								</textarea>
-						</section>
+  console.log(name)
+                </textarea>
+            </section>
 
-						<section id="incrementing-random-number-generator-slide">
-								<h1 class="small">Infinite generators are streams</h1>
-								<textarea class="code-editor" mode="javascript" id="incrementing-random-number-generator">
+            <section id="incrementing-random-number-generator-slide">
+                <h1 class="small">Infinite generators are streams</h1>
+                <textarea class="code-editor" mode="javascript" id="incrementing-random-number-generator">
 const incrementingRandoms = function * () {
-		const rand = (max, min=0) => Math.floor(Math.random() * (max - min)) + min
-		let prev = 0
-		while(true) {
-				prev = rand(prev+1000, prev+1)
-				yield prev
-		}
+    const rand = (max, min=0) => Math.floor(Math.random() * (max - min)) + min
+    let prev = 0
+    while(true) {
+        prev = rand(prev+1000, prev+1)
+        yield prev
+    }
 }
-								</textarea>
+                </textarea>
 
-								<figure>
-										<button class="run">run</button>
-										<textarea class="code-editor" mode="javascript" data-depends="#incrementing-random-number-generator">
+                <figure>
+                    <button class="run">run</button>
+                    <textarea class="code-editor" mode="javascript" data-depends="#incrementing-random-number-generator">
 const it = incrementingRandoms()
 for(let i = 0; i < 10; i+=1)
-		console.log(it.next().value)
-										</textarea>
-								</figure>
-						</section>
-				</section>
+    console.log(it.next().value)
+                    </textarea>
+                </figure>
+            </section>
+        </section>
 
-				<section>
-						<section id="you-choose-how-it-runs">
-								<h1 class="small">You choose how to enumerate iterators</h1>
-								<button class="run">run</button>
-								<textarea class="code-editor" mode="javascript" data-depends="#incrementing-random-number-generator">
+        <section>
+            <section id="you-choose-how-it-runs">
+                <h1 class="small">You choose how to enumerate iterators</h1>
+                <button class="run">run</button>
+                <textarea class="code-editor" mode="javascript" data-depends="#incrementing-random-number-generator">
 const logAndTakeEveryMs = (ms, createIterator) => {
-		const it = createIterator()
-		const logAndGetNext = ({done, value}) => {
-				if(done) return;
-				console.log(value)
-				setTimeout( () => logAndGetNext(it.next()) , ms)
-		}
-		logAndGetNext(it.next())
+    const it = createIterator()
+    const logAndGetNext = ({done, value}) => {
+        if(done) return;
+        console.log(value)
+        setTimeout( () => logAndGetNext(it.next()) , ms)
+    }
+    logAndGetNext(it.next())
 }
 
 logAndTakeEveryMs(500, incrementingRandoms)
-								</textarea>
-						</section>
+                </textarea>
+            </section>
 
-						<section id="count-with-promises">
-								<h1 class="small">Now with...promises!</h1>
-								<button class="run">run</button>
-								<textarea class="code-editor" mode="javascript">
+            <section id="count-with-promises">
+                <h1 class="small">Now with...promises!</h1>
+                <button class="run">run</button>
+                <textarea class="code-editor" mode="javascript">
 const delayedIncrementingRandoms = function * () {
-		const rand = (max, min=0) => Math.floor(Math.random() * (max - min)) + min
-		let val = 0
-		while(true) {
-				val = rand(val+1000, val+1)
-				console.log("Currently", val)
-				yield new Promise(resolve =>
-						setTimeout(() => resolve(val), 300)
-				)
-		}
+    const rand = (max, min=0) => Math.floor(Math.random() * (max - min)) + min
+    let val = 0
+    while(true) {
+        val = rand(val+1000, val+1)
+        console.log("Currently", val)
+        yield new Promise(resolve =>
+            setTimeout(() => resolve(val), 300)
+        )
+    }
 }
 
 const runAsync = (createIterator) => {
-		const it = createIterator()
-		const runNext = ({done, value: promise}) => {
-				if(done) return;
-				promise.then(() => runNext(it.next()))
-		}
-		runNext(it.next())
+    const it = createIterator()
+    const runNext = ({done, value: promise}) => {
+        if(done) return;
+        promise.then(() => runNext(it.next()))
+    }
+    runNext(it.next())
 }
 
 runAsync(delayedIncrementingRandoms)
-								</textarea>
-						</section>
+                </textarea>
+            </section>
 
-						<section id="unwind-yielded-async">
-								<h1 class="small">You can use this with anything async</h1>
-								<textarea class="code-editor" mode="javascript">
+            <section id="unwind-yielded-async">
+                <h1 class="small">You can use this with anything async</h1>
+                <textarea class="code-editor" mode="javascript">
 const async = (createIterator) => (...args) => runAsync(...args)
 
 const get = async(function * (url) {
-		const result = yield fetch(url)
-		return result.json()
+    const result = yield fetch(url)
+    return result.json()
 })
 const showTopRecords = async(function * () {
-		const topRecords = yield get('/top-records')
-		const top3Records = topRecords.slice(0, 3)
-		const gettingTop3Details = top3Records.map((id) => get(`/top-records/details/${id}`))
-		const topDetails = yield Promise.all(gettingTop3Details)
-		const detailsHtml = template(topDetails)
-		$container.detailsHtml(detailsHtml)
+    const topRecords = yield get('/top-records')
+    const top3Records = topRecords.slice(0, 3)
+    const gettingTop3Details = top3Records.map((id) => get(`/top-records/details/${id}`))
+    const topDetails = yield Promise.all(gettingTop3Details)
+    const detailsHtml = template(topDetails)
+    $container.detailsHtml(detailsHtml)
 })
-								</textarea>
-						</section>
+                </textarea>
+            </section>
 
-						<section id="async-is-better-or-not">
-								<h1 class="small">Async...await was clearly a breakthrough</h1>
-								<div class="row">
-										<textarea class="code-editor" mode="javascript">
+            <section id="async-is-better-or-not">
+                <h1 class="small">Async...await was clearly a breakthrough</h1>
+                <div class="row">
+                    <textarea class="code-editor" mode="javascript">
 const get = async(function * (url) {
-		const result = yield fetch(url)
-		return result.json()
+    const result = yield fetch(url)
+    return result.json()
 })
 const showTopRecords = async(function * () {
-		const topRecords = yield get('/top-records')
-		const top3Records = topRecords.slice(0, 3)
-		const gettingTop3Details = top3Records.map((id) => get(`/top-records/details/${id}`))
-		const topDetails = yield Promise.all(gettingTop3Details)
-		const detailsHtml = template(topDetails)
-		$container.detailsHtml(detailsHtml)
+    const topRecords = yield get('/top-records')
+    const top3Records = topRecords.slice(0, 3)
+    const gettingTop3Details = top3Records.map((id) => get(`/top-records/details/${id}`))
+    const topDetails = yield Promise.all(gettingTop3Details)
+    const detailsHtml = template(topDetails)
+    $container.detailsHtml(detailsHtml)
 })
-										</textarea>
-										<textarea class="code-editor" mode="javascript">
+                    </textarea>
+                    <textarea class="code-editor" mode="javascript">
 const get = async function (url) {
-		const result = await fetch(url)
-		return result.json()
+    const result = await fetch(url)
+    return result.json()
 }
 const showTopRecords = async function () {
-		const topRecords = await get('/top-records')
-		const top3Records = topRecords.slice(0, 3)
-		const gettingTop3Details = top3Records.map((id) => get(`/top-records/details/${id}`))
-		const topDetails = await Promise.all(gettingTop3Details)
-		const detailsHtml = template(topDetails)
-		$container.detailsHtml(detailsHtml)
+    const topRecords = await get('/top-records')
+    const top3Records = topRecords.slice(0, 3)
+    const gettingTop3Details = top3Records.map((id) => get(`/top-records/details/${id}`))
+    const topDetails = await Promise.all(gettingTop3Details)
+    const detailsHtml = template(topDetails)
+    $container.detailsHtml(detailsHtml)
 }
-										</textarea>
-								</div>
-						</section>
-				</section>
+                    </textarea>
+                </div>
+            </section>
+        </section>
 
-				<section id="bubble-chart">
-						<h1 class="small">Requisite Functional Reactive Programming bubble chart</h1>
-						<div style="display: flex; justify-content: center">
-								<img src="img/bubble-chart.png" height="550" >
-						</div>
-						<a href="https://gist.github.com/staltz/868e7e9bc2a7b8c1f754">From this Egghead Tutorial</a>
-						<aside class="speaker-notes">
-								Unfortunately, this usually means learning a bunch of syntax
-						</aside>
-				</section>
+        <section id="bubble-chart">
+            <h1 class="small">Requisite Functional Reactive Programming bubble chart</h1>
+            <div style="display: flex; justify-content: center">
+                <img src="img/bubble-chart.png" height="550" >
+            </div>
+            <a href="https://gist.github.com/staltz/868e7e9bc2a7b8c1f754">From this Egghead Tutorial</a>
+            <aside class="speaker-notes">
+                Unfortunately, this usually means learning a bunch of syntax
+            </aside>
+        </section>
 
-				<section>
-						<section id="about-debounce">
-								<h1 class="small">In search of a better debounce</h1>
-								<button id="debounce-target">Click Here to Message</button>
-								<figure>
-										<figcaption>How a debounced action works</figcaption>
-										<ul style="font-size:.8em">
-												<li>Wait for button click</li>
-												<li>
-														Start a timer and wait for either it or button click
-														<ul>
-																<li>If the next thing that happens is another click, start waiting for tick or click again</li>
-														</ul>
-												</li>
-												<li>Run action</li>
-												<li>Start over</li>
-										</ul>
-								</figure>
-								<hr>
-								<figure>
-										<figcaption>How a debounced action is implemented</figcaption>
-										<textarea class="code-editor" mode="javascript" data-autorun="true">
+        <section>
+            <section id="about-debounce">
+                <h1 class="small">In search of a better debounce</h1>
+                <button id="debounce-target">Click Here to Message</button>
+                <figure>
+                    <figcaption>How a debounced action works</figcaption>
+                    <ul style="font-size:.8em">
+                        <li>Wait for button click</li>
+                        <li>
+                            Start a timer and wait for either it or button click
+                            <ul>
+                                <li>If the next thing that happens is another click, start waiting for tick or click again</li>
+                            </ul>
+                        </li>
+                        <li>Run action</li>
+                        <li>Start over</li>
+                    </ul>
+                </figure>
+                <hr>
+                <figure>
+                    <figcaption>How a debounced action is implemented</figcaption>
+                    <textarea class="code-editor" mode="javascript" data-autorun="true">
 let currentTimeout = null
 const btn = document.querySelector('#debounce-target')
 btn.addEventListener('click', () => {
-		if(currentTimeout)
-				clearTimeout(currentTimeout)
-		currentTimeout = setTimeout(() => {
-				console.log("You clicked it then stopped!")
-		}, 2000)
+    if(currentTimeout)
+        clearTimeout(currentTimeout)
+    currentTimeout = setTimeout(() => {
+        console.log("You clicked it then stopped!")
+    }, 2000)
 })
-										</textarea>
-								</figure>
-						</section>
-						<section id="underscorejs-debounce">
-								<h1 class="small">And here's how underscore does a generic one</h1>
-								<textarea class="code-editor" mode="javascript">
+                    </textarea>
+                </figure>
+            </section>
+            <section id="underscorejs-debounce">
+                <h1 class="small">And here's how underscore does a generic one</h1>
+                <textarea class="code-editor" mode="javascript">
 _.debounce = function(func, wait, immediate) {
-		var timeout, args, context, timestamp, result;
+    var timeout, args, context, timestamp, result;
 
-		var later = function() {
-			var last = _.now() - timestamp;
+    var later = function() {
+      var last = _.now() - timestamp;
 
-			if (last < wait && last >= 0) {
-				timeout = setTimeout(later, wait - last);
-			} else {
-				timeout = null;
-				if (!immediate) {
-					result = func.apply(context, args);
-					if (!timeout) context = args = null;
-				}
-			}
-		};
+      if (last < wait && last >= 0) {
+        timeout = setTimeout(later, wait - last);
+      } else {
+        timeout = null;
+        if (!immediate) {
+          result = func.apply(context, args);
+          if (!timeout) context = args = null;
+        }
+      }
+    };
 
-		return function() {
-			context = this;
-			args = arguments;
-			timestamp = _.now();
-			var callNow = immediate && !timeout;
-			if (!timeout) timeout = setTimeout(later, wait);
-			if (callNow) {
-				result = func.apply(context, args);
-				context = args = null;
-			}
+    return function() {
+      context = this;
+      args = arguments;
+      timestamp = _.now();
+      var callNow = immediate && !timeout;
+      if (!timeout) timeout = setTimeout(later, wait);
+      if (callNow) {
+        result = func.apply(context, args);
+        context = args = null;
+      }
 
-			return result;
-		};
+      return result;
+    };
 };
-								</textarea>
-								<p style="text-transform: uppercase">
-										What is even going on!?
-								</p>
-						</section>
-				</section>
+                </textarea>
+                <p style="text-transform: uppercase">
+                    What is even going on!?
+                </p>
+            </section>
+        </section>
 
-				<section>
-						<section id="basic-gimgen-debounce">
-								<h1 class="small">Finally, some gimgen</h1>
-								<button id="debounce-gimgen-target">Click Here to Message</button>
-								<figure>
-										<ul style="font-size:.8em">
-												<li>Wait for button click</li>
-												<li>
-														Start a timer and wait for either it or button click
-														<ul>
-																<li>If the next thing that happens is another click, start waiting for tick or click again</li>
-														</ul>
-												</li>
-												<li>Run action</li>
-												<li>Start over</li>
-										</ul>
-								</figure>
-								<hr>
-								<textarea class="code-editor" mode="javascript" data-autorun="true">
+        <section>
+            <section id="basic-gimgen-debounce">
+                <h1 class="small">Finally, some gimgen</h1>
+                <button id="debounce-gimgen-target">Click Here to Message</button>
+                <figure>
+                    <ul style="font-size:.8em">
+                        <li>Wait for button click</li>
+                        <li>
+                            Start a timer and wait for either it or button click
+                            <ul>
+                                <li>If the next thing that happens is another click, start waiting for tick or click again</li>
+                            </ul>
+                        </li>
+                        <li>Run action</li>
+                        <li>Start over</li>
+                    </ul>
+                </figure>
+                <hr>
+                <textarea class="code-editor" mode="javascript" data-autorun="true">
 const { runGimgen, domEventToSignal, anySignal, timeoutSignal } = gimgen
 
 runGimgen(function * () {
-		const tick = timeoutSignal(2000)
-		const btn = document.querySelector('#debounce-gimgen-target')
-		const click = domEventToSignal(btn, 'click')
-		const tickOrClick = anySignal(tick, click)
-		while(true) {
-				yield click
-				while(click == (yield tickOrClick).signal) {}
-				console.log("Gimgen says you clicked some stuff a while ago")
-		}
+    const tick = timeoutSignal(2000)
+    const btn = document.querySelector('#debounce-gimgen-target')
+    const click = domEventToSignal(btn, 'click')
+    const tickOrClick = anySignal(tick, click)
+    while(true) {
+        yield click
+        while(click == (yield tickOrClick).signal) {}
+        console.log("Gimgen says you clicked some stuff a while ago")
+    }
 })
-								</textarea>
-						</section>
+                </textarea>
+            </section>
 
-						<script id="import-gimgen" type="text/non-executing-js">
-const { runGimgen, domEventToSignal, anySignal, timeoutSignal, promiseToSignal, createSignalFactory, controlSignal } = gimgen
-						</script>
+            <script id="import-gimgen" type="text/non-executing-js">
+             const { runGimgen, domEventToSignal, anySignal, timeoutSignal, promiseToSignal, createSignalFactory, controlSignal } = gimgen
+            </script>
 
-						<section id="basic-gimgen-debounce2">
-								<h1 class="small">You get to use some weird primitives</h1>
-								<button id="debounce-gimgen-target2">Click Here to Message</button>
-								<figure>
-										<ul style="font-size:.8em">
-												<li>Wait for button click</li>
-												<li>
-														Start a timer and wait for either it or button click
-														<ul>
-																<li>If the next thing that happens is another click, start waiting for tick or click again</li>
-														</ul>
-												</li>
-												<li>Run action</li>
-												<li>Start over</li>
-										</ul>
-								</figure>
-								<hr>
-								<textarea class="code-editor" mode="javascript" data-autorun="true">
+            <section id="basic-gimgen-debounce2">
+                <h1 class="small">You get to use some weird primitives</h1>
+                <button id="debounce-gimgen-target2">Click Here to Message</button>
+                <figure>
+                    <ul style="font-size:.8em">
+                        <li>Wait for button click</li>
+                        <li>
+                            Start a timer and wait for either it or button click
+                            <ul>
+                                <li>If the next thing that happens is another click, start waiting for tick or click again</li>
+                            </ul>
+                        </li>
+                        <li>Run action</li>
+                        <li>Start over</li>
+                    </ul>
+                </figure>
+                <hr>
+                <textarea class="code-editor" mode="javascript" data-autorun="true">
 const { runGimgen, domEventToSignal, anySignal, timeoutSignal } = gimgen
 
 runGimgen(function * () {
-		const tick = timeoutSignal(2000)
-		const btn = document.querySelector('#debounce-gimgen-target2')
-		const click = domEventToSignal(btn, 'click')
-		const tickOrClick = anySignal(tick, click)
-		while(true) {
-				yield click;
-				while(true) {
-						const {signal} = yield tickOrClick
-						if(tick == signal)
-								break;
-				}
-				console.log("Gimgen says you clicked some stuff a while ago");
-		}
+    const tick = timeoutSignal(2000)
+    const btn = document.querySelector('#debounce-gimgen-target2')
+    const click = domEventToSignal(btn, 'click')
+    const tickOrClick = anySignal(tick, click)
+    while(true) {
+        yield click;
+        while(true) {
+            const {signal} = yield tickOrClick
+            if(tick == signal)
+                break;
+        }
+        console.log("Gimgen says you clicked some stuff a while ago");
+    }
 })
-								</textarea>
-						</section>
+                </textarea>
+            </section>
 
 
-						<section id="implement-that-frp-chart">
-								<style>
-										#implement-that-frp-chart .CodeMirror {
-												height: initial !important;
-										}
-								</style>
-								<h1 class="small">The same stream</h1>
-								<div class="row">
-										<img src="img/bubble-chart.png" height="550" >
-										<figure>
-												<button id="multiple-clicks-button">Click Here to Message Multiple Clicks in 2 seconds</button>
-												<textarea class="code-editor" mode="javascript" data-depends="#import-gimgen" data-autorun="true">
+            <section id="implement-that-frp-chart">
+                <style>
+                 #implement-that-frp-chart .CodeMirror {
+                     height: initial !important;
+                 }
+                </style>
+                <h1 class="small">The same stream</h1>
+                <div class="row">
+                    <img src="img/bubble-chart.png" height="550" >
+                    <figure>
+                        <button id="multiple-clicks-button">Click Here to Message Multiple Clicks in 2 seconds</button>
+                        <textarea class="code-editor" mode="javascript" data-depends="#import-gimgen" data-autorun="true">
 const throttleAndAggregate = (ms, signalToThrottle) =>
-		controlSignal(function * ({emit}) {
-				const tick = timeoutSignal(ms)
-				let throttledSinceTick = []
-				while(true) {
-						const {signal, result} = yield anySignal(tick, signalToThrottle)
-						if(signalToThrottle == signal)
-								throttledSinceTick = [...throttledSinceTick, result]
-						else if(tick == signal && throttledSinceTick.length) {
-								const toEmit = throttledSinceTick
-								throttledSinceTick = []
-								emit(toEmit)
-						}
-				}
-		})
+    controlSignal(function * ({emit}) {
+        const tick = timeoutSignal(ms)
+        let throttledSinceTick = []
+        while(true) {
+            const {signal, result} = yield anySignal(tick, signalToThrottle)
+            if(signalToThrottle == signal)
+                throttledSinceTick = [...throttledSinceTick, result]
+            else if(tick == signal && throttledSinceTick.length) {
+                const toEmit = throttledSinceTick
+                throttledSinceTick = []
+                emit(toEmit)
+            }
+        }
+    })
 const throttledMultipleClicks = throttleAndAggregate(
-		2000,
-		domEventToSignal(document.querySelector('#multiple-clicks-button'), 'click')
+    2000,
+    domEventToSignal(document.querySelector('#multiple-clicks-button'), 'click')
 )
 const moreThanTwoThrottledClicks = controlSignal(function * ({emit}) {
-		while(true) {
-				const clicks = yield throttledMultipleClicks;
-				if(clicks.length > 2)
-						emit(clicks.length)
-		}
+    while(true) {
+        const clicks = yield throttledMultipleClicks;
+        if(clicks.length > 2)
+            emit(clicks.length)
+    }
 })
 runGimgen(function * () {
-		while(true) {
-				const clickCount = yield moreThanTwoThrottledClicks
-				console.log(`received ${clickCount} clicks`)
-		}
+    while(true) {
+        const clickCount = yield moreThanTwoThrottledClicks
+        console.log(`received ${clickCount} clicks`)
+    }
 })
-												</textarea>
-										</figure>
-								</div>
-						</section>
-				</section>
-				</section>
+                        </textarea>
+                    </figure>
+                </div>
+            </section>
+        </section>
+        </section>
 
-				<section id="more-examples" data-markdown>
-						# Let's look at more examples
-						---
-						[Demos](http://georgemauer.net/gimgen/)
-						
-						[Library and Docs](https://github.com/togakangaroo/gimgen/)
-				</section>
+        <section id="more-examples" data-markdown>
+            # Let's look at more examples
+            ---
+            [Demos](http://georgemauer.net/gimgen/)
 
-				<section id="i-dont-know">
-						<h1 class="small">I don't know what I have here</h1>
-						<img src="img/shruggies.jpg">
-				</section>
+            [Library and Docs](https://github.com/togakangaroo/gimgen/)
+        </section>
 
-		</div>
+        <section id="i-dont-know">
+            <h1 class="small">I don't know what I have here</h1>
+            <img src="img/shruggies.jpg">
+        </section>
+
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/head.min.js"></script>
@@ -655,51 +669,51 @@ runGimgen(function * () {
 <script src="https://cdn.rawgit.com/togakangaroo/gimgen/0.5.0/dist/gimgen.js"></script>
 
 <script>{
-		Reveal.initialize({
-				history: true,
-				dependencies: [
-						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.min.js', async: true, callback:() => hljs.initHighlightingOnLoad() },
-						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/marked.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
-						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/markdown.min.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
-						{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/zoom-js/zoom.min.js', async: true }, { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/notes/notes.min.js', async: true },
-				]
-		});
-		const codeMirrors = new Map()
-		Reveal.addEventListener( 'slidechanged', ({currentSlide}) => {
-				for(let el of currentSlide.querySelectorAll('.code-editor'))
-						codeMirrors.get(el) && codeMirrors.get(el).refresh()
-		} );
+     Reveal.initialize({
+         history: true,
+         dependencies: [
+             { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.min.js', async: true, callback:() => hljs.initHighlightingOnLoad() },
+             { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/marked.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
+             { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/markdown.min.js', condition:() => !!document.querySelector( '[data-markdown]' ) },
+             { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/zoom-js/zoom.min.js', async: true }, { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/notes/notes.min.js', async: true },
+         ]
+     });
+     const codeMirrors = new Map()
+     Reveal.addEventListener( 'slidechanged', ({currentSlide}) => {
+         for(let el of currentSlide.querySelectorAll('.code-editor'))
+             codeMirrors.get(el) && codeMirrors.get(el).refresh()
+     } );
 
-		const runEditor = codeEl => {
-				if(!codeEl.matches('.code-editor'))
-						return;
-				const dependsOnEditors = !codeEl.dataset.depends ? [] : Array.from(document.querySelectorAll(codeEl.dataset.depends))
-				const editorsToRun = [...dependsOnEditors, codeEl]
-						const codeToRun = editorsToRun.map(ce => ce.value || ce.textContent).join('\n;\n')
-						console.clear()
-						eval(`{
+     const runEditor = codeEl => {
+         if(!codeEl.matches('.code-editor'))
+             return;
+         const dependsOnEditors = !codeEl.dataset.depends ? [] : Array.from(document.querySelectorAll(codeEl.dataset.depends))
+         const editorsToRun = [...dependsOnEditors, codeEl]
+         const codeToRun = editorsToRun.map(ce => ce.value || ce.textContent).join('\n;\n')
+         console.clear()
+         eval(`{
 ${codeToRun}
 }`)
-		}
+     }
 
-		setTimeout(() => {
-				for(let el of document.querySelectorAll('.code-editor')) {
-						const ed = CodeMirror.fromTextArea(el, {
-								lineNumbers: true,
-								keyMap: 'vim',
-								extraKeys: {
-										"F11": (cm) => {
-												cm.setOption("fullScreen", !cm.getOption("fullScreen"))
-										},
-								},
-						});
-						ed.on('change', () => ed.save());
-						codeMirrors.set(el, ed)
-						if(el.dataset.autorun === 'true')
-								runEditor(el)
-				}
-		}, 500)
-		for(let button of document.querySelectorAll('.run')) {
-				button.addEventListener('click', () => runEditor(button.nextElementSibling))
-		}
-}</script>
+     setTimeout(() => {
+         for(let el of document.querySelectorAll('.code-editor')) {
+             const ed = CodeMirror.fromTextArea(el, {
+                 lineNumbers: true,
+                 keyMap: 'vim',
+                 extraKeys: {
+                     "F11": (cm) => {
+                         cm.setOption("fullScreen", !cm.getOption("fullScreen"))
+                     },
+                 },
+             });
+             ed.on('change', () => ed.save());
+             codeMirrors.set(el, ed)
+             if(el.dataset.autorun === 'true')
+                 runEditor(el)
+         }
+     }, 500)
+     for(let button of document.querySelectorAll('.run')) {
+         button.addEventListener('click', () => runEditor(button.nextElementSibling))
+     }
+ }</script>
