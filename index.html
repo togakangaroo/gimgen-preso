@@ -48,7 +48,8 @@
 
         <section>
             <section data-markdown id="main">
-                # what is
+                # what the
+                # heck is
                 # gimgen?
                 ----
                 George Mauer
@@ -348,7 +349,7 @@ logAndTakeEveryMs(500, incrementingRandoms)
             <section id="count-with-promises">
                 <h1 class="small">Now with...promises!</h1>
                 <button class="run">run</button>
-                <textarea class="code-editor" mode="javascript">
+                <textarea class="code-editor" mode="javascript" style="height: 50em">
 const delayedIncrementingRandoms = function * () {
     const rand = (max, min=0) => Math.floor(Math.random() * (max - min)) + min
     let val = 0
@@ -682,6 +683,7 @@ runGimgen(function * () {
      Reveal.addEventListener( 'slidechanged', ({currentSlide}) => {
          for(let el of currentSlide.querySelectorAll('.code-editor'))
              codeMirrors.get(el) && codeMirrors.get(el).refresh()
+         console.clear()
      } );
 
      const runEditor = codeEl => {
