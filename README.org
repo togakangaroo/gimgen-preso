@@ -1,0 +1,61 @@
+* implement ~zip~
+  
+#+name: zip-example  
+| collection 1 | collection 2 | collection 3 | result       |
+|--------------+--------------+--------------+--------------|
+|            1 | a            | fish         | (1, a, fish) |
+|            2 | b            | pita         | (2, b, pita) |
+|            3 |              | cheese       |              |
+|            4 |              |              |              |
+
+#+begin_src js :var example=zip-example
+  const zip = function * (...collections) {
+      const iterators = collections.map(c => c[symbol.iterator]());
+      while(true) {
+          const nexts = iterators.map(i => i.next())
+          if(nexts.some(n => n.done))
+              return
+          yield nexts.map(n => n.value)
+      }
+  }
+
+  const col = (index) => example.map(x => x[index]).filter(x => x)
+
+  return [...zip(col(0), col(1), col(2) )]
+#+end_src
+
+#+results:
+| 1 | a | fish |
+| 2 | b | pita |
+
+* implement ~zip-longest~
+  
+#+name: zip-longest-example  
+| collection 1 | collection 2 | collection 3 | result         |
+|--------------+--------------+--------------+----------------|
+|            1 | a            | fish         | (1, a, fish)   |
+|            2 | b            | pita         | (2, b, pita)   |
+|            3 |              | cheese       | (3, _, cheese) |
+|            4 |              |              | (4, _, _)      |
+
+#+begin_src js :var example=zip-longest-example
+  const zipLongest = function * (padWith, ...collections) {
+      const iterators = collections.map(c => c[Symbol.iterator]());
+      while(true) {
+          const nexts = iterators.map(i => i.next())
+          if(nexts.every(n => n.done))
+              return
+          yield nexts.map(n => n.done ? padWith : n.value)
+      }
+  }
+
+  const col = (index) => example.map(x => x[index]).filter(x => x)
+
+  return [...zipLongest(`_`, col(0), col(1), col(2) )]
+#+end_src
+
+#+results:
+| 1 | a | fish   |
+| 2 | b | pita   |
+| 3 | _ | cheese |
+| 4 | _ | _      |
